@@ -12,7 +12,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
-from datetime import UTC, datetime
+from datetime import datetime, timezone
 from typing import Any
 
 import anthropic
@@ -30,8 +30,8 @@ from src.skills.score_calculation import (
 
 load_dotenv()
 
-_SUBAGENT_MODEL = "claude-opus-4-20250514"
-_SYNTHESIS_MODEL = "claude-opus-4-20250514"
+_SUBAGENT_MODEL = "claude-sonnet-4-6"
+_SYNTHESIS_MODEL = "claude-sonnet-4-6"
 _BATCH_SIZE = 20
 
 
@@ -347,7 +347,7 @@ async def _get_observations(
         json_text = raw_text.strip()
         if json_text.startswith("```"):
             lines = json_text.split("\n")
-            lines = [line for line in lines if not line.strip().startswith("```")]
+            lines = [l for l in lines if not l.strip().startswith("```")]
             json_text = "\n".join(lines)
         parsed = json.loads(json_text)
         return parsed.get("observations", {})
@@ -482,7 +482,7 @@ async def run_synthesis(
         json_text = raw_text.strip()
         if json_text.startswith("```"):
             lines = json_text.split("\n")
-            lines = [line for line in lines if not line.strip().startswith("```")]
+            lines = [l for l in lines if not l.strip().startswith("```")]
             json_text = "\n".join(lines)
         return json.loads(json_text)
     except Exception as exc:
@@ -551,7 +551,7 @@ async def run_orchestrator(
 
     analysis = {
         "run_id": run_id,
-        "generated_at": datetime.now(UTC).isoformat(),
+        "generated_at": datetime.now(timezone.utc).isoformat(),
         "run_mode": run_mode,
         "summary": summary,
         "aio_results": merged["aio_results"],
