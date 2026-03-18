@@ -18,6 +18,7 @@ These run on the operator's machine (not in CI) but are good to document:
 
 | Secret | Description |
 |---|---|
+| `BENCHMARK_GITHUB_TOKEN` | PAT with `repo` + `workflow` scopes, used by `run-benchmark.yml` to write back to the data branch. Use a dedicated token distinct from your personal `GITHUB_TOKEN` so rotation is independent. |
 | `ANTHROPIC_API_KEY` | Anthropic API key for Claude / Agent SDK calls |
 | `ARCADE_API_KEY` | Arcade API key for AIO/GEO tool execution |
 | `ARCADE_USER_ID` | Arcade user ID |
