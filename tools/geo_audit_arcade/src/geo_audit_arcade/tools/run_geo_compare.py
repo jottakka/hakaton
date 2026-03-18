@@ -22,7 +22,7 @@ from ..models import CollectGeoEvidenceResult
 from ..validation import validate_claims
 from .collect_geo_evidence import collect_geo_evidence
 
-_DEFAULT_MODEL = "claude-opus-4-5"
+_DEFAULT_MODEL = "claude-sonnet-4-6"
 
 _SYSTEM_PROMPT = """\
 You are a GEO (Generative Engine Optimization) competitive comparison auditor. \

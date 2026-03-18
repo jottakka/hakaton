@@ -56,6 +56,7 @@ _RUNNERS: dict[str, tuple[Any, str]] = {
     "openai-gpt4o-mini": (_run_openai, "gpt-4o-mini"),
     "anthropic-sonnet": (_run_anthropic, "claude-sonnet-4-6"),
     "anthropic-haiku": (_run_anthropic, "claude-haiku-4-6"),
+    "anthropic-opus": (_run_anthropic, "claude-opus-4-6"),
 }
 
 
