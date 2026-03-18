@@ -14,8 +14,12 @@ dependencies = [
     "pydantic-settings>=2.0.0",
     "tenacity>=8.0.0",
     "claude-agent-sdk>=0.1.10; sys_platform == 'darwin'",
-    "aio-analyzer",
 ]
+
+[project.optional-dependencies]
+# aio-analyzer is a local editable path dep used only by aioa_runner.py
+# (which runs in GitHub Actions, not in the deployed MCP server).
+runners = ["aio-analyzer"]
 
 [[project.authors]]
 name = "Arcade"
