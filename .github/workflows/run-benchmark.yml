@@ -47,6 +47,7 @@ jobs:
           GITHUB_REPO: ${{ github.event.repository.name }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ARCADE_API_KEY: ${{ secrets.ARCADE_API_KEY }}
+          ARCADE_USER_ID: ${{ secrets.ARCADE_USER_ID }}
         run: |
           uv run --project tools/benchmark_control_arcade python -m benchmark_control_arcade.workflow_entrypoint \
             "${{ inputs.run_id }}" "${{ inputs.run_type }}" '${{ inputs.run_spec_json }}'
