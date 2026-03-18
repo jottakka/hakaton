@@ -19,8 +19,13 @@ import re
 from pathlib import Path
 from typing import Any
 
-from claude_agent_sdk import ClaudeAgentOptions, query
-from claude_agent_sdk.types import McpHttpServerConfig
+try:
+    from claude_agent_sdk import ClaudeAgentOptions, query
+    from claude_agent_sdk.types import McpHttpServerConfig
+except ImportError:  # claude-agent-sdk ships macOS-only wheels; CI runs on Linux
+    ClaudeAgentOptions = None  # type: ignore[assignment,misc]
+    McpHttpServerConfig = None  # type: ignore[assignment,misc]
+    query = None  # type: ignore[assignment]
 
 from benchmark_control_arcade.config import Settings
 from benchmark_control_arcade.run_models import RunSpec, RunType
@@ -111,6 +116,11 @@ async def run_geo_benchmark(spec: RunSpec, run_id: str, output_dir: Path) -> dic
     Raises:
         ValueError: If geo_audit_mcp_url is not configured in Settings.
     """
+    if query is None:
+        raise RuntimeError(
+            "claude-agent-sdk is not installed on this platform. "
+            "GEO benchmark runs require macOS (arm64)."
+        )
     if spec.run_type is not RunType.geo:
         raise ValueError(f"run_geo_benchmark only handles run_type=geo, got {spec.run_type}")
 
