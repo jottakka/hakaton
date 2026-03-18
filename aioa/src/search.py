@@ -21,40 +21,11 @@ load_dotenv()
 logging.getLogger("mcp.client.streamable_http").setLevel(logging.ERROR)
 
 # ---------------------------------------------------------------------------
-# Security constants
-# ---------------------------------------------------------------------------
-
-# Hosts that are permitted as MCP server targets.  Only HTTPS is allowed.
-_ALLOWED_MCP_HOSTS: frozenset[str] = frozenset({
-    "api.arcade.dev",
-    "localhost",
-    "127.0.0.1",
-})
-
-
-def _validate_mcp_server_url(url: str) -> None:
-    """Raise ValueError if *url* is not an approved HTTPS endpoint.
-
-    The error message intentionally omits the secret API key value.
-    """
-    from urllib.parse import urlparse
-    parsed = urlparse(url)
-    if parsed.scheme != "https":
-        raise ValueError(
-            f"MCP_SERVER_URL must use https:// scheme (got scheme={parsed.scheme!r}). "
-            "Only HTTPS connections to approved hosts are permitted."
-        )
-    if parsed.hostname not in _ALLOWED_MCP_HOSTS:
-        raise ValueError(
-            f"MCP_SERVER_URL host is not on the approved allowlist "
-            f"(host={parsed.hostname!r}). "
-            f"Allowed hosts: {sorted(_ALLOWED_MCP_HOSTS)}"
-        )
-
-
-# ---------------------------------------------------------------------------
 # MCP session management
 # ---------------------------------------------------------------------------
+
+_MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "https://api.arcade.dev/mcp/aio")
+
 
 def _build_mcp_http_client() -> httpx.AsyncClient:
     """Build an httpx client with Arcade auth headers when available."""
@@ -70,23 +41,9 @@ def _build_mcp_http_client() -> httpx.AsyncClient:
 
 @asynccontextmanager
 async def mcp_session() -> AsyncIterator[ClientSession]:
-    """Open a single MCP session that can be reused for many tool calls.
-
-    Raises EnvironmentError if ARCADE_API_KEY is not set or empty.
-    Raises ValueError if MCP_SERVER_URL is not on the approved allowlist.
-    """
-    api_key = os.environ.get("ARCADE_API_KEY", "")
-    if not api_key:
-        raise EnvironmentError(
-            "ARCADE_API_KEY is required but not set. "
-            "Set the ARCADE_API_KEY environment variable before running searches."
-        )
-
-    mcp_server_url = os.environ.get("MCP_SERVER_URL", "https://api.arcade.dev/mcp/AIO")
-    _validate_mcp_server_url(mcp_server_url)
-
+    """Open a single MCP session that can be reused for many tool calls."""
     http_client = _build_mcp_http_client()
-    async with streamable_http_client(mcp_server_url, http_client=http_client) as (read, write, _):
+    async with streamable_http_client(_MCP_SERVER_URL, http_client=http_client) as (read, write, _):
         async with ClientSession(read, write) as session:
             await session.initialize()
             yield session
