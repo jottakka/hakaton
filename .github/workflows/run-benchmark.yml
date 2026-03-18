@@ -1,0 +1,52 @@
+name: Run Benchmark
+
+on:
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: 'Run identifier'
+        required: true
+      run_type:
+        description: 'Run type: aioa or geo'
+        required: true
+      run_spec_json:
+        description: 'RunSpec as JSON string'
+        required: true
+
+run-name: "Benchmark ${{ inputs.run_type }} / ${{ inputs.run_id }}"
+
+concurrency:
+  group: benchmark-run-${{ inputs.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main code branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Checkout data branch into data/
+        uses: actions/checkout@v4
+        with:
+          ref: benchmark-data
+          path: data
+          fetch-depth: 0
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Sync benchmark_control_arcade deps
+        run: uv sync --project tools/benchmark_control_arcade
+
+      - name: Run benchmark
+        env:
+          GITHUB_TOKEN: ${{ secrets.BENCHMARK_GITHUB_TOKEN }}
+          GITHUB_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPO: ${{ github.event.repository.name }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ARCADE_API_KEY: ${{ secrets.ARCADE_API_KEY }}
+        run: |
+          uv run --project tools/benchmark_control_arcade python -m benchmark_control_arcade.workflow_entrypoint \
+            "${{ inputs.run_id }}" "${{ inputs.run_type }}" '${{ inputs.run_spec_json }}'

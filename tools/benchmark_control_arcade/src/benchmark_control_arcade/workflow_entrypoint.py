@@ -1,0 +1,209 @@
+"""Workflow entrypoint for benchmark runs.
+
+This module is invoked by the GitHub Actions workflow as:
+
+    python -m benchmark_control_arcade.workflow_entrypoint <run_id> <run_type> <run_spec_json>
+
+It orchestrates the full lifecycle of a single benchmark run:
+1. Load Settings and create GitHubClient.
+2. Update run.json status to "running".
+3. Parse RunSpec from run_spec_json.
+4. Route to aioa_runner or geo_runner based on run_type.
+5. Update run.json to "completed" with summary and artifacts.
+6. On any exception: update run.json to "failed" with error message.
+
+Errors are always caught and recorded — this process must never exit non-zero
+while leaving run.json in "running" state.
+"""
+
+import asyncio
+import logging
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+import tempfile
+
+from benchmark_control_arcade import aioa_runner, geo_runner
+from benchmark_control_arcade.config import Settings
+from benchmark_control_arcade.github_client import GitHubClient
+from benchmark_control_arcade.run_models import RunArtifact, RunSpec, RunStatus, RunType
+
+logger = logging.getLogger(__name__)
+
+
+async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
+    """Run the full benchmark lifecycle for a single run.
+
+    Parameters
+    ----------
+    run_id:
+        The unique identifier for this run. Must already exist on the data
+        branch (created by the control plane before dispatching the workflow).
+    run_type:
+        Either "aioa" or "geo".
+    run_spec_json:
+        JSON string that can be parsed into a RunSpec.
+    """
+    settings = Settings()  # type: ignore[call-arg]
+    client = GitHubClient(settings)
+
+    # ------------------------------------------------------------------
+    # Fetch the existing RunRecord so we have created_at for layout paths.
+    # ------------------------------------------------------------------
+    # We need to infer created_at. Since the run_id encodes a timestamp in
+    # many formats, we fall back to "now" when we can't fetch it yet — but
+    # ideally the record already exists. We fetch it to get created_at right.
+    # Use a fallback created_at = now so that if the fetch fails we can still
+    # write a failed record.
+    fallback_now = datetime.now(tz=timezone.utc)
+
+    try:
+        record = await client.get_run_record(run_id, fallback_now)
+        created_at = record.created_at
+    except Exception:
+        # Can't fetch: use fallback_now. The update_run_record calls below
+        # will also use fallback_now — they may fail too, but we try anyway.
+        logger.warning(
+            "Could not fetch initial run record for %s; using current time as created_at",
+            run_id,
+            exc_info=True,
+        )
+        created_at = fallback_now
+        record = None  # type: ignore[assignment]
+
+    # ------------------------------------------------------------------
+    # Transition to "running"
+    # ------------------------------------------------------------------
+    try:
+        if record is not None:
+            running_record = record.model_copy(
+                update={
+                    "status": RunStatus.running,
+                    "updated_at": datetime.now(tz=timezone.utc),
+                }
+            )
+            await client.update_run_record(running_record)
+        else:
+            # Build a minimal record to mark as running
+            from benchmark_control_arcade.run_models import RunRecord
+
+            spec_for_record = RunSpec.model_validate_json(run_spec_json)
+            running_record = RunRecord(
+                run_id=run_id,
+                run_type=RunType(run_type),
+                status=RunStatus.running,
+                created_at=created_at,
+                updated_at=datetime.now(tz=timezone.utc),
+                repo=f"{settings.github_owner}/{settings.github_repo}",
+                workflow_name=settings.github_run_workflow,
+                data_branch=settings.github_data_branch,
+                spec=spec_for_record,
+            )
+            await client.update_run_record(running_record)
+    except Exception:
+        logger.error("Failed to update run record to 'running' for %s", run_id, exc_info=True)
+        # Do not return here — continue and try to run anyway, then fail.
+
+    # ------------------------------------------------------------------
+    # Execute the benchmark
+    # ------------------------------------------------------------------
+    with tempfile.TemporaryDirectory() as tmp_dir:
+        output_dir = Path(tmp_dir)
+        try:
+            spec = RunSpec.model_validate_json(run_spec_json)
+            rtype = RunType(run_type)
+
+            if rtype == RunType.aioa:
+                result = await aioa_runner.run_aioa_benchmark(spec, run_id, output_dir)
+            elif rtype == RunType.geo:
+                result = await geo_runner.run_geo_benchmark(spec, run_id, output_dir)
+            else:
+                raise ValueError(f"Unknown run_type: {run_type!r}")
+
+            # ------------------------------------------------------------------
+            # Transition to "completed"
+            # ------------------------------------------------------------------
+            artifacts: list[RunArtifact] = [
+                RunArtifact(name=Path(p).name, path=p)
+                for p in result.get("artifacts", [])
+            ]
+            summary = result.get("summary") or {k: v for k, v in result.items() if k != "run_id"}
+
+            if running_record is not None:
+                completed_record = running_record.model_copy(
+                    update={
+                        "status": RunStatus.completed,
+                        "updated_at": datetime.now(tz=timezone.utc),
+                        "artifacts": artifacts,
+                        "summary": summary,
+                        "error": None,
+                    }
+                )
+            else:
+                from benchmark_control_arcade.run_models import RunRecord
+
+                completed_record = RunRecord(
+                    run_id=run_id,
+                    run_type=rtype,
+                    status=RunStatus.completed,
+                    created_at=created_at,
+                    updated_at=datetime.now(tz=timezone.utc),
+                    repo=f"{settings.github_owner}/{settings.github_repo}",
+                    workflow_name=settings.github_run_workflow,
+                    data_branch=settings.github_data_branch,
+                    spec=spec,
+                    artifacts=artifacts,
+                    summary=summary,
+                )
+            await client.update_run_record(completed_record)
+            logger.info("Run %s completed successfully", run_id)
+
+        except Exception as exc:
+            logger.error("Run %s failed: %s", run_id, exc, exc_info=True)
+
+            # ------------------------------------------------------------------
+            # Transition to "failed" — must not re-raise
+            # ------------------------------------------------------------------
+            try:
+                if running_record is not None:
+                    failed_record = running_record.model_copy(
+                        update={
+                            "status": RunStatus.failed,
+                            "updated_at": datetime.now(tz=timezone.utc),
+                            "error": str(exc),
+                        }
+                    )
+                else:
+                    from benchmark_control_arcade.run_models import RunRecord
+
+                    failed_record = RunRecord(
+                        run_id=run_id,
+                        run_type=RunType(run_type) if run_type in RunType._value2member_map_ else RunType.aioa,
+                        status=RunStatus.failed,
+                        created_at=created_at,
+                        updated_at=datetime.now(tz=timezone.utc),
+                        repo=f"{settings.github_owner}/{settings.github_repo}",
+                        workflow_name=settings.github_run_workflow,
+                        data_branch=settings.github_data_branch,
+                        spec=RunSpec(run_type=RunType(run_type) if run_type in RunType._value2member_map_ else RunType.aioa, target="unknown"),
+                        error=str(exc),
+                    )
+                await client.update_run_record(failed_record)
+            except Exception:
+                logger.error(
+                    "Failed to update run record to 'failed' for %s", run_id, exc_info=True
+                )
+
+
+if __name__ == "__main__":
+    if len(sys.argv) != 4:
+        print(
+            "Usage: python -m benchmark_control_arcade.workflow_entrypoint"
+            " <run_id> <run_type> <run_spec_json>",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    _, run_id_arg, run_type_arg, run_spec_json_arg = sys.argv
+    logging.basicConfig(level=logging.INFO)
+    asyncio.run(run_workflow(run_id_arg, run_type_arg, run_spec_json_arg))

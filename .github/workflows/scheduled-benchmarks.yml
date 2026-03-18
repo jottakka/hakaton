@@ -1,0 +1,45 @@
+name: Scheduled Benchmarks
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch: {}
+
+run-name: "Scheduled benchmarks ${{ github.run_id }}"
+
+concurrency:
+  group: scheduled-benchmarks
+  cancel-in-progress: false
+
+jobs:
+  composio-full:
+    name: AIOA – composio-full
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main code branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Sync benchmark_control_arcade deps
+        run: uv sync --project tools/benchmark_control_arcade
+
+      - name: Generate run_id
+        id: run_id
+        run: |
+          RUN_ID="scheduled-composio-full-$(date -u +%Y%m%dT%H%M%SZ)"
+          echo "run_id=${RUN_ID}" >> "$GITHUB_OUTPUT"
+
+      - name: Run composio-full benchmark
+        env:
+          GITHUB_TOKEN: ${{ secrets.BENCHMARK_GITHUB_TOKEN }}
+          GITHUB_OWNER: ${{ github.repository_owner }}
+          GITHUB_REPO: ${{ github.event.repository.name }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ARCADE_API_KEY: ${{ secrets.ARCADE_API_KEY }}
+        run: |
+          SPEC_JSON=$(cat run-specs/scheduled/composio-full.json)
+          uv run --project tools/benchmark_control_arcade python -m benchmark_control_arcade.workflow_entrypoint \
+            "${{ steps.run_id.outputs.run_id }}" "aioa" "${SPEC_JSON}"
