@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "benchmark-control-arcade"
+version = "0.1.0"
+description = "Arcade MCP control plane for triggering and tracking AIOA and GEO benchmark runs"
+requires-python = ">=3.11"
+dependencies = [
+    "arcade-mcp-server>=1.11.1,<2.0.0",
+    "httpx>=0.27.2,<1.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "tenacity>=8.0.0",
+    "claude-agent-sdk>=0.1.10",
+]
+
+[[project.authors]]
+name = "Arcade"
+email = "dev@arcade.dev"
+
+[project.entry-points.arcade_toolkits]
+toolkit_name = "benchmark_control_arcade"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/benchmark_control_arcade"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=5.0",
+    "respx>=0.21",
+    "ruff>=0.7.4",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+fix = true
+
+[tool.ruff.lint]
+select = ["I", "E", "W", "F", "UP", "B", "SIM", "C4"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/*" = ["S101", "E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"

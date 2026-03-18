@@ -1,0 +1,76 @@
+repos:
+  # ---------- General file hygiene ----------
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-added-large-files
+        args: [--maxkb=1024]
+      - id: check-merge-conflict
+      - id: no-commit-to-branch
+        args: [--branch, main]
+
+  # ---------- Secret detection ----------
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: [--baseline, .secrets.baseline]
+        exclude: (\.env\.example|uv\.lock|\.venv/)
+
+  # ---------- aioa ----------
+  - repo: local
+    hooks:
+      - id: ruff-format-aioa
+        name: ruff format (aioa)
+        language: system
+        entry: uv run --project aioa ruff format
+        types: [python]
+        files: ^aioa/
+        pass_filenames: true
+      - id: ruff-check-aioa
+        name: ruff check (aioa)
+        language: system
+        entry: uv run --project aioa ruff check
+        types: [python]
+        files: ^aioa/
+        pass_filenames: true
+
+  # ---------- geo_audit_arcade ----------
+  - repo: local
+    hooks:
+      - id: ruff-format-geo
+        name: ruff format (geo_audit_arcade)
+        language: system
+        entry: uv run --project tools/geo_audit_arcade ruff format
+        types: [python]
+        files: ^tools/geo_audit_arcade/
+        pass_filenames: true
+      - id: ruff-check-geo
+        name: ruff check (geo_audit_arcade)
+        language: system
+        entry: uv run --project tools/geo_audit_arcade ruff check
+        types: [python]
+        files: ^tools/geo_audit_arcade/
+        pass_filenames: true
+
+  # ---------- benchmark_control_arcade ----------
+  - repo: local
+    hooks:
+      - id: ruff-format-bca
+        name: ruff format (benchmark_control_arcade)
+        language: system
+        entry: uv run --project tools/benchmark_control_arcade ruff format
+        types: [python]
+        files: ^tools/benchmark_control_arcade/
+        pass_filenames: true
+      - id: ruff-check-bca
+        name: ruff check (benchmark_control_arcade)
+        language: system
+        entry: uv run --project tools/benchmark_control_arcade ruff check
+        types: [python]
+        files: ^tools/benchmark_control_arcade/
+        pass_filenames: true
