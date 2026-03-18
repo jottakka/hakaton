@@ -52,10 +52,10 @@ async def _run_anthropic(prompt_text: str, model_id: str) -> tuple[str, int]:
 # ---------------------------------------------------------------------------
 
 _RUNNERS: dict[str, tuple[Any, str]] = {
-    "openai-gpt53": (_run_openai, "gpt-5.3-chat-latest"),
-    "openai-gpt52": (_run_openai, "gpt-5.2-chat-latest"),
-    "anthropic-sonnet": (_run_anthropic, "claude-sonnet-4-6"),
-    "anthropic-opus": (_run_anthropic, "claude-opus-4-6"),
+    "openai-gpt4o": (_run_openai, "gpt-4o"),
+    "openai-gpt4o-mini": (_run_openai, "gpt-4o-mini"),
+    "anthropic-sonnet": (_run_anthropic, "claude-sonnet-4-5"),
+    "anthropic-opus": (_run_anthropic, "claude-opus-4-5"),
 }
 
 
