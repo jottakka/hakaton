@@ -1,0 +1,315 @@
+{
+  "run_id": "c81afc16-0feb-44ca-82ea-64f097049ece",
+  "generated_at": "2026-03-18T17:59:44.788566+00:00",
+  "run_mode": "seo_only",
+  "summary": {
+    "arcade_avg_aio_score": null,
+    "arcade_avg_seo_score": 0,
+    "top_competitor": "Composio",
+    "biggest_gap": "Composio dominates SEO rankings with a perfect score of 100 for 'best mcp gateway' while Arcade scores 0, indicating a critical need for SEO optimization."
+  },
+  "aio_results": [
+    {
+      "prompt_id": "adhoc_p1",
+      "prompt_text": "best mcp gateway",
+      "category": "adhoc",
+      "expected_winner": "Arcade",
+      "by_model": {},
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "No companies were mentioned in the LLM response about MCP gateways, suggesting either limited knowledge of this space or that the prompt didn't trigger company-specific recommendations."
+    }
+  ],
+  "seo_results": [
+    {
+      "term_id": "adhoc_s1",
+      "query": "best mcp gateway",
+      "category": "adhoc",
+      "expected_winner": "Arcade",
+      "by_engine": {
+        "google": {
+          "rankings": {
+            "Arcade": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Composio": {
+              "position": 1,
+              "url": "https://composio.dev/content/best-mcp-gateway-for-developers",
+              "snippet": "The Top MCP Gateways for 2026: A Detailed Comparison · Composio · TrueFoundry · Lunar.dev MCPX · Lasso Security MCP Gateway · Docker MCP Gateway."
+            },
+            "Workato": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Teleport": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Kong": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Mulesoft": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "MintMCP": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Merge": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 100,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 100,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "status": "ok",
+      "observations": "Composio dominated search results with a 100 score (likely appearing in position 1), while all other companies including Arcade were absent from the top search results for MCP gateways."
+    }
+  ],
+  "gap_report": [
+    {
+      "id": "adhoc_s1",
+      "type": "seo",
+      "text": "best mcp gateway",
+      "expected": "Arcade",
+      "actual_winner": "Composio",
+      "arcade_score": 0,
+      "winner_score": 100,
+      "gap_size": 100,
+      "recommendation": "Create comprehensive MCP gateway content including comparison guides, technical documentation, and use cases while building authoritative backlinks to improve rankings for this high-value keyword."
+    }
+  ],
+  "comparison_matrix": {
+    "companies": [
+      "Arcade",
+      "Composio",
+      "Workato",
+      "Teleport",
+      "Kong",
+      "Mulesoft",
+      "MintMCP",
+      "Merge"
+    ],
+    "aio_avg_scores": {
+      "Arcade": 0,
+      "Composio": 0,
+      "Workato": 0,
+      "Teleport": 0,
+      "Kong": 0,
+      "Mulesoft": 0,
+      "MintMCP": 0,
+      "Merge": 0
+    },
+    "seo_avg_scores": {
+      "Arcade": 0,
+      "Composio": 100,
+      "Workato": 0,
+      "Teleport": 0,
+      "Kong": 0,
+      "Mulesoft": 0,
+      "MintMCP": 0,
+      "Merge": 0
+    },
+    "combined_avg_scores": {
+      "Arcade": 0,
+      "Composio": 50,
+      "Workato": 0,
+      "Teleport": 0,
+      "Kong": 0,
+      "Mulesoft": 0,
+      "MintMCP": 0,
+      "Merge": 0
+    },
+    "head_to_head": {
+      "Arcade_vs_Composio": {
+        "aio": {
+          "Arcade": 0,
+          "Composio": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 0,
+          "Composio": 100,
+          "winner": "Composio"
+        },
+        "combined": {
+          "Arcade": 0,
+          "Composio": 50,
+          "winner": "Composio"
+        }
+      },
+      "Arcade_vs_Workato": {
+        "aio": {
+          "Arcade": 0,
+          "Workato": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 0,
+          "Workato": 0,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 0,
+          "Workato": 0,
+          "winner": "Arcade"
+        }
+      },
+      "Arcade_vs_Teleport": {
+        "aio": {
+          "Arcade": 0,
+          "Teleport": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 0,
+          "Teleport": 0,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 0,
+          "Teleport": 0,
+          "winner": "Arcade"
+        }
+      },
+      "Arcade_vs_Kong": {
+        "aio": {
+          "Arcade": 0,
+          "Kong": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 0,
+          "Kong": 0,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 0,
+          "Kong": 0,
+          "winner": "Arcade"
+        }
+      },
+      "Arcade_vs_Mulesoft": {
+        "aio": {
+          "Arcade": 0,
+          "Mulesoft": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 0,
+          "Mulesoft": 0,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 0,
+          "Mulesoft": 0,
+          "winner": "Arcade"
+        }
+      },
+      "Arcade_vs_MintMCP": {
+        "aio": {
+          "Arcade": 0,
+          "MintMCP": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 0,
+          "MintMCP": 0,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 0,
+          "MintMCP": 0,
+          "winner": "Arcade"
+        }
+      },
+      "Arcade_vs_Merge": {
+        "aio": {
+          "Arcade": 0,
+          "Merge": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 0,
+          "Merge": 0,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 0,
+          "Merge": 0,
+          "winner": "Arcade"
+        }
+      }
+    },
+    "rankings": {
+      "aio": [
+        "Arcade",
+        "Composio",
+        "Workato",
+        "Teleport",
+        "Kong",
+        "Mulesoft",
+        "MintMCP",
+        "Merge"
+      ],
+      "seo": [
+        "Composio",
+        "Arcade",
+        "Workato",
+        "Teleport",
+        "Kong",
+        "Mulesoft",
+        "MintMCP",
+        "Merge"
+      ],
+      "combined": [
+        "Composio",
+        "Arcade",
+        "Workato",
+        "Teleport",
+        "Kong",
+        "Mulesoft",
+        "MintMCP",
+        "Merge"
+      ]
+    }
+  }
+}

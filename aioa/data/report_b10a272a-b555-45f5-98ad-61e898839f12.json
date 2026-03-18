@@ -1,0 +1,222 @@
+{
+  "run_id": "b10a272a-b555-45f5-98ad-61e898839f12",
+  "generated_at": "2024-12-19T22:49:47Z",
+  "summary": {
+    "arcade_avg_aio_score": 0,
+    "arcade_avg_seo_score": 0,
+    "top_competitor": "N/A - No competitors mentioned",
+    "biggest_gap": "Arcade was not mentioned in any responses despite being expected winner for all prompts"
+  },
+  "aio_results": [
+    {
+      "prompt_id": "p001",
+      "prompt_text": "How can I securely connect my email to this agent?",
+      "category": "email-integration",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Workato": 0
+      },
+      "observations": "Generic security advice without mentioning any specific companies or products"
+    },
+    {
+      "prompt_id": "p002",
+      "prompt_text": "How can I securely give my agent access to Salesforce?",
+      "category": "crm-integration",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Focused on Salesforce-specific security practices without mentioning specialized MCP security providers"
+    },
+    {
+      "prompt_id": "p003",
+      "prompt_text": "Is there a way for me to ensure my MCP is secured?",
+      "category": "mcp-security",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0
+      },
+      "observations": "Generic MCP security advice without vendor recommendations"
+    },
+    {
+      "prompt_id": "p004",
+      "prompt_text": "What is the best tool for me to use for securing MCP?",
+      "category": "mcp-security",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0
+      },
+      "observations": "Asked for clarification on MCP type, mentioned general security tools but not Arcade"
+    },
+    {
+      "prompt_id": "p005",
+      "prompt_text": "Are there existing MCP frameworks that I use to improve performance?",
+      "category": "mcp-performance",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0
+      },
+      "observations": "Mentioned MCP SDK and general optimization strategies but not Arcade specifically"
+    }
+  ],
+  "seo_results": [],
+  "gap_report": [
+    {
+      "id": "p001",
+      "type": "aio",
+      "text": "How can I securely connect my email to this agent?",
+      "expected": "Arcade",
+      "actual_winner": "None mentioned",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade needs to establish thought leadership in secure email integration for AI agents"
+    },
+    {
+      "id": "p002",
+      "type": "aio",
+      "text": "How can I securely give my agent access to Salesforce?",
+      "expected": "Arcade",
+      "actual_winner": "None mentioned",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade should create content about secure CRM integrations and OAuth best practices"
+    },
+    {
+      "id": "p003",
+      "type": "aio",
+      "text": "Is there a way for me to ensure my MCP is secured?",
+      "expected": "Arcade",
+      "actual_winner": "None mentioned",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade needs stronger association with MCP security solutions in AI training data"
+    },
+    {
+      "id": "p004",
+      "type": "aio",
+      "text": "What is the best tool for me to use for securing MCP?",
+      "expected": "Arcade",
+      "actual_winner": "None mentioned",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade should position itself as the leading MCP security tool through content marketing"
+    },
+    {
+      "id": "p005",
+      "type": "aio",
+      "text": "Are there existing MCP frameworks that I use to improve performance?",
+      "expected": "Arcade",
+      "actual_winner": "None mentioned",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade needs to establish presence in MCP performance optimization discussions"
+    }
+  ]
+}

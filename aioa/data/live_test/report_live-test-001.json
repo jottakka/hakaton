@@ -1,0 +1,235 @@
+{
+  "run_id": "live-test-001",
+  "generated_at": "2026-03-18T21:02:16.815302+00:00",
+  "run_mode": "seo_only",
+  "summary": {
+    "arcade_avg_aio_score": null,
+    "arcade_avg_seo_score": 50,
+    "top_competitor": "Composio",
+    "biggest_gap": "No significant gaps identified, but SEO performance across all competitors is notably low, presenting an opportunity for market leadership."
+  },
+  "aio_results": [
+    {
+      "prompt_id": "p1",
+      "prompt_text": "What are the best tools for connecting AI agents to external APIs?",
+      "category": "",
+      "expected_winner": "Arcade",
+      "by_model": {},
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Zapier": 0,
+        "Make": 0
+      },
+      "observations": "None of the target or competitor companies were mentioned in the response about tools for connecting AI agents to external APIs, suggesting potential visibility gaps in this key use case."
+    },
+    {
+      "prompt_id": "p2",
+      "prompt_text": "How can I give an AI agent access to Gmail and Slack?",
+      "category": "",
+      "expected_winner": "Arcade",
+      "by_model": {},
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Zapier": 0,
+        "Make": 0
+      },
+      "observations": "Neither Arcade nor its competitors were mentioned when discussing AI agent access to Gmail and Slack, indicating missed opportunities for positioning in specific integration scenarios."
+    }
+  ],
+  "seo_results": [
+    {
+      "term_id": "s1",
+      "query": "best AI agent integration tools 2025",
+      "category": "",
+      "expected_winner": "Arcade",
+      "by_engine": {
+        "google": {
+          "rankings": {
+            "Arcade": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Composio": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Zapier": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Make": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Zapier": 0,
+            "Make": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Zapier": 0,
+        "Make": 0
+      },
+      "status": "ok",
+      "observations": "Search results for AI agent integration tools in 2025 showed no presence of Arcade, Composio, Zapier, or Make in the top 3 results, revealing weak SEO positioning for this high-intent keyword."
+    },
+    {
+      "term_id": "s2",
+      "query": "arcade.dev vs composio AI tools",
+      "category": "",
+      "expected_winner": "Arcade",
+      "by_engine": {
+        "google": {
+          "rankings": {
+            "Arcade": {
+              "position": 1,
+              "url": "https://www.reddit.com/r/modelcontextprotocol/comments/1n7svxn/tooling_pricing_arcade_vs_composio/",
+              "snippet": "... composio tool calls are 100 times cheaper than arcade.dev? is there something i am missing? why would anyone pay for arcade? Upvote 3. Downvote"
+            },
+            "Composio": {
+              "position": 1,
+              "url": "https://www.reddit.com/r/modelcontextprotocol/comments/1n7svxn/tooling_pricing_arcade_vs_composio/",
+              "snippet": "... composio tool calls are 100 times cheaper than arcade.dev? is there something i am missing? why would anyone pay for arcade? Upvote 3. Downvote"
+            },
+            "Zapier": {
+              "position": null,
+              "url": null,
+              "snippet": null
+            },
+            "Make": {
+              "position": 8,
+              "url": "https://dev.to/composiodev/top-10-make-alternatives-for-building-ai-automation-1jgc",
+              "snippet": "Composio is built for developers who want to connect their AI agent with 500+ apps, APIs, and workflows. It's a developer-first platform and a ..."
+            }
+          },
+          "scores": {
+            "Arcade": 100,
+            "Composio": 100,
+            "Zapier": 0,
+            "Make": 10
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 100,
+        "Composio": 100,
+        "Zapier": 0,
+        "Make": 10
+      },
+      "status": "ok",
+      "observations": "Direct comparison searches between Arcade and Composio show both companies prominently featured (100% presence), with Make also appearing (10%), suggesting strong brand awareness when users search for direct comparisons."
+    }
+  ],
+  "gap_report": [],
+  "comparison_matrix": {
+    "companies": [
+      "Arcade",
+      "Composio",
+      "Zapier",
+      "Make"
+    ],
+    "aio_avg_scores": {
+      "Arcade": 0,
+      "Composio": 0,
+      "Zapier": 0,
+      "Make": 0
+    },
+    "seo_avg_scores": {
+      "Arcade": 50,
+      "Composio": 50,
+      "Zapier": 0,
+      "Make": 5
+    },
+    "combined_avg_scores": {
+      "Arcade": 25,
+      "Composio": 25,
+      "Zapier": 0,
+      "Make": 2
+    },
+    "head_to_head": {
+      "Arcade_vs_Composio": {
+        "aio": {
+          "Arcade": 0,
+          "Composio": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 50,
+          "Composio": 50,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 25,
+          "Composio": 25,
+          "winner": "Arcade"
+        }
+      },
+      "Arcade_vs_Zapier": {
+        "aio": {
+          "Arcade": 0,
+          "Zapier": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 50,
+          "Zapier": 0,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 25,
+          "Zapier": 0,
+          "winner": "Arcade"
+        }
+      },
+      "Arcade_vs_Make": {
+        "aio": {
+          "Arcade": 0,
+          "Make": 0,
+          "winner": "Arcade"
+        },
+        "seo": {
+          "Arcade": 50,
+          "Make": 5,
+          "winner": "Arcade"
+        },
+        "combined": {
+          "Arcade": 25,
+          "Make": 2,
+          "winner": "Arcade"
+        }
+      }
+    },
+    "rankings": {
+      "aio": [
+        "Arcade",
+        "Composio",
+        "Zapier",
+        "Make"
+      ],
+      "seo": [
+        "Arcade",
+        "Composio",
+        "Make",
+        "Zapier"
+      ],
+      "combined": [
+        "Arcade",
+        "Composio",
+        "Make",
+        "Zapier"
+      ]
+    }
+  }
+}

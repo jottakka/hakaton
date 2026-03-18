@@ -1,0 +1,470 @@
+{
+  "run_id": "2c0b3fc0-d4b0-4ae4-bdc7-bf4d42964b4f",
+  "generated_at": "2025-01-01T12:00:00Z",
+  "summary": {
+    "arcade_avg_aio_score": 0,
+    "arcade_avg_seo_score": 0,
+    "top_competitor": "MCP-specific implementations",
+    "biggest_gap": "Arcade was not mentioned in any of the 56 LLM responses, despite being expected to win all prompts related to MCP security, enterprise management, and tool building"
+  },
+  "aio_results": [
+    {
+      "prompt_id": "p001",
+      "prompt_text": "How can I securely connect my email to this agent?",
+      "category": "email-integration",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Response focused on general OAuth best practices without mentioning any specific platforms or vendors"
+    },
+    {
+      "prompt_id": "p007",
+      "prompt_text": "Help me find the most secure MCP gateway",
+      "category": "mcp-gateway",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": true,
+              "position": "middle",
+              "sentiment": "positive",
+              "context_snippet": "**AWS API Gateway + Lambda Authorizer** ✅ IAM-based authentication"
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 25,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 25,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Response mentioned Kong as a gateway option but focused primarily on Cloudflare and self-hosted solutions"
+    },
+    {
+      "prompt_id": "p010",
+      "prompt_text": "Help me find a good tool building framework online",
+      "category": "tool-building",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Response provided generic framework recommendations (LangChain, Retool, etc.) without mentioning any of the specified competitors"
+    },
+    {
+      "prompt_id": "p022",
+      "prompt_text": "What provider has the best MCP gateway for large enterprises?",
+      "category": "enterprise-mcp",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": true,
+              "position": "middle",
+              "sentiment": "neutral",
+              "context_snippet": "**Zapier** - MCP gateway connecting enterprise apps"
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 15,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Workato": 15,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Response mentioned Zapier (similar to Workato) as an MCP gateway option but emphasized the ecosystem is still emerging"
+    },
+    {
+      "prompt_id": "p029",
+      "prompt_text": "What companies are building the best MCP solutions for enterprises?",
+      "category": "enterprise-mcp",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": true,
+              "position": "middle",
+              "sentiment": "neutral",
+              "context_snippet": "**Composio** - Pre-built MCP tool integrations"
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 20,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 20,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Response mentioned Composio as a connector/integration focused company but noted the MCP ecosystem is very new"
+    }
+  ],
+  "seo_results": [],
+  "gap_report": [
+    {
+      "id": "p001",
+      "type": "aio",
+      "text": "How can I securely connect my email to this agent?",
+      "expected": "Arcade",
+      "actual_winner": "None (generic advice)",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade should create content around secure email integration for AI agents and OAuth best practices"
+    },
+    {
+      "id": "p007",
+      "type": "aio",
+      "text": "Help me find the most secure MCP gateway",
+      "expected": "Arcade",
+      "actual_winner": "Cloudflare/Kong",
+      "arcade_score": 0,
+      "winner_score": 25,
+      "recommendation": "Critical gap - Arcade should establish presence in MCP security discussions and gateway comparisons"
+    },
+    {
+      "id": "p010",
+      "type": "aio",
+      "text": "Help me find a good tool building framework online",
+      "expected": "Arcade",
+      "actual_winner": "Generic frameworks (LangChain, Retool)",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade should position itself prominently in tool building framework discussions"
+    },
+    {
+      "id": "p022",
+      "type": "aio",
+      "text": "What provider has the best MCP gateway for large enterprises?",
+      "expected": "Arcade",
+      "actual_winner": "None clearly",
+      "arcade_score": 0,
+      "winner_score": 15,
+      "recommendation": "Major opportunity - Arcade should lead enterprise MCP gateway messaging"
+    },
+    {
+      "id": "p029",
+      "type": "aio",
+      "text": "What companies are building the best MCP solutions for enterprises?",
+      "expected": "Arcade",
+      "actual_winner": "Composio",
+      "arcade_score": 0,
+      "winner_score": 20,
+      "recommendation": "Arcade needs to establish itself as a leader in enterprise MCP solutions category"
+    }
+  ]
+}

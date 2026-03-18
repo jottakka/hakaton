@@ -1,0 +1,627 @@
+{
+  "run_id": "afdd5566-1624-4ac6-bb61-dfb04946bf02",
+  "generated_at": "2025-01-15T10:30:00Z",
+  "summary": {
+    "arcade_avg_aio_score": 8,
+    "arcade_avg_seo_score": 0,
+    "top_competitor": "Composio",
+    "biggest_gap": "Arcade was not mentioned in any LLM responses despite being the expected winner for all prompts, while competitors like Composio received multiple mentions and positive sentiment"
+  },
+  "aio_results": [
+    {
+      "prompt_id": "p001",
+      "prompt_text": "How can I securely connect my email to this agent?",
+      "category": "email-integration",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        },
+        "anthropic-opus": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 0,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Neither model mentioned any of the target companies. Responses focused on general OAuth best practices and platform-agnostic advice."
+    },
+    {
+      "prompt_id": "p007",
+      "prompt_text": "Help me find the most secure MCP gateway",
+      "category": "mcp-gateway",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": true,
+              "position": "middle",
+              "sentiment": "neutral",
+              "context_snippet": "Kong - exploring MCP gateway features"
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 15,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        },
+        "anthropic-opus": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": true,
+              "position": "late",
+              "sentiment": "positive",
+              "context_snippet": "Arcade AI - Managed auth layer for MCP tools - Token management and credential vaulting - Granular permission scoping per tool"
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 25,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 25,
+        "Composio": 0,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 15,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Only Opus mentioned Arcade, describing it positively as having managed auth and granular permissions. Sonnet mentioned Kong briefly."
+    },
+    {
+      "prompt_id": "p022",
+      "prompt_text": "What provider has the best MCP gateway for large enterprises?",
+      "category": "enterprise-mcp",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": true,
+              "position": "early",
+              "sentiment": "positive",
+              "context_snippet": "Kong - Established API gateway + MCP support - Enterprise pedigree"
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 0,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 20,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        },
+        "anthropic-opus": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": true,
+              "position": "late",
+              "sentiment": "positive",
+              "context_snippet": "Composio - Managed MCP tool hosting - Auth management (OAuth, API keys) for 250+ integrations - Enterprise audit logging"
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": true,
+              "position": "early",
+              "sentiment": "positive",
+              "context_snippet": "Kong - Has positioned itself as offering MCP gateway capabilities layered onto its existing API gateway, with enterprise features"
+            },
+            "Mulesoft": {
+              "mentioned": true,
+              "position": "early",
+              "sentiment": "positive",
+              "context_snippet": "Mulesoft (Salesforce) – Leveraging its integration platform heritage to offer MCP management for enterprises in the Salesforce ecosystem"
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 20,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 25,
+            "Mulesoft": 20,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 20,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 45,
+        "Mulesoft": 20,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Arcade was not mentioned by either model despite being expected winner. Kong received highest aggregate score with mentions from both models. Composio and Mulesoft also received positive mentions from Opus."
+    },
+    {
+      "prompt_id": "p043",
+      "prompt_text": "What's the best way to connect my OpenAI Agents SDK agent to real-world tools like Gmail, Slack, and GitHub?",
+      "category": "agent-framework",
+      "expected_winner": "Arcade",
+      "by_model": {
+        "anthropic-sonnet": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": true,
+              "position": "early",
+              "sentiment": "positive",
+              "context_snippet": "Composio (purpose-built for AI agents) - Get pre-built, authenticated tools - Composio handles OAuth, retries, pagination, etc."
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 30,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        },
+        "anthropic-opus": {
+          "mentions": {
+            "Arcade": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Composio": {
+              "mentioned": true,
+              "position": "middle",
+              "sentiment": "positive",
+              "context_snippet": "Using Composio (purpose-built for AI agents) - Get pre-built, authenticated tools"
+            },
+            "Workato": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Teleport": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Kong": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Mulesoft": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "MintMCP": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            },
+            "Merge": {
+              "mentioned": false,
+              "position": null,
+              "sentiment": null,
+              "context_snippet": null
+            }
+          },
+          "scores": {
+            "Arcade": 0,
+            "Composio": 25,
+            "Workato": 0,
+            "Teleport": 0,
+            "Kong": 0,
+            "Mulesoft": 0,
+            "MintMCP": 0,
+            "Merge": 0
+          }
+        }
+      },
+      "aggregate_score": {
+        "Arcade": 0,
+        "Composio": 55,
+        "Workato": 0,
+        "Teleport": 0,
+        "Kong": 0,
+        "Mulesoft": 0,
+        "MintMCP": 0,
+        "Merge": 0
+      },
+      "observations": "Composio received strong positive mentions from both models as a purpose-built solution for AI agents. Arcade was not mentioned despite being expected winner for agent framework integration."
+    }
+  ],
+  "seo_results": [],
+  "gap_report": [
+    {
+      "id": "p001",
+      "type": "aio",
+      "text": "How can I securely connect my email to this agent?",
+      "expected": "Arcade",
+      "actual_winner": "None",
+      "arcade_score": 0,
+      "winner_score": 0,
+      "recommendation": "Arcade needs better visibility in email integration security discussions. Consider creating content around OAuth flows and agent email integration security."
+    },
+    {
+      "id": "p007",
+      "type": "aio",
+      "text": "Help me find the most secure MCP gateway",
+      "expected": "Arcade",
+      "actual_winner": "Arcade",
+      "arcade_score": 25,
+      "winner_score": 25,
+      "recommendation": "Positive mention from Opus but not Sonnet. Ensure consistent messaging about MCP security capabilities across all models."
+    },
+    {
+      "id": "p022",
+      "type": "aio",
+      "text": "What provider has the best MCP gateway for large enterprises?",
+      "expected": "Arcade",
+      "actual_winner": "Kong",
+      "arcade_score": 0,
+      "winner_score": 45,
+      "recommendation": "Major gap - Kong and other competitors mentioned but not Arcade for enterprise MCP. Need stronger enterprise positioning and thought leadership."
+    },
+    {
+      "id": "p043",
+      "type": "aio",
+      "text": "What's the best way to connect my OpenAI Agents SDK agent to real-world tools like Gmail, Slack, and GitHub?",
+      "expected": "Arcade",
+      "actual_winner": "Composio",
+      "arcade_score": 0,
+      "winner_score": 55,
+      "recommendation": "Composio strongly positioned as the go-to solution for agent tool integration. Arcade needs better integration with popular agent frameworks and stronger developer advocacy."
+    }
+  ]
+}

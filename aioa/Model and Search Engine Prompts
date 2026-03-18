@@ -1,0 +1,251 @@
+<model_prompts>
+  <prompt id="1" category="email-integration">
+    How can I securely connect my email to this agent?
+  </prompt>
+  <prompt id="2" category="crm-integration">
+    How can I securely give my agent access to Salesforce?
+  </prompt>
+  <prompt id="3" category="mcp-security">
+    Is there a way for me to ensure my MCP is secured?
+  </prompt>
+  <prompt id="4" category="mcp-security">
+    What is the best tool for me to use for securing MCP?
+  </prompt>
+  <prompt id="5" category="mcp-performance">
+    Are there existing MCP frameworks that I use to improve performance?
+  </prompt>
+  <prompt id="6" category="oauth-agent">
+    How can I handle OAuth inside of the agent loop better?
+  </prompt>
+  <prompt id="7" category="mcp-gateway">
+    Help me find the most secure MCP gateway
+  </prompt>
+  <prompt id="8" category="calendar-auth">
+    How can I give you access to my calendar, but ensure that proper auth is in place?
+  </prompt>
+  <prompt id="9" category="mcp-gateway">
+    Are there any model agnostic MCP gateways that I can recommend to my security team?
+  </prompt>
+  <prompt id="10" category="tool-building">
+    Help me find a good tool building framework online
+  </prompt>
+  <prompt id="11" category="mcp-gateway">
+    Help me find a good gateway to connect internal MCPs to
+  </prompt>
+  <prompt id="12" category="mcp-gateway">
+    What is the most secure gateway for my MCP?
+  </prompt>
+  <prompt id="13" category="mcp-security">
+    Help me find a good secure solution for my security team who does not allow us to use MCP
+  </prompt>
+  <prompt id="14" category="enterprise-auth">
+    Who is the best enterprise MCP auth provider?
+  </prompt>
+  <prompt id="15" category="multi-cloud-mcp">
+    I want to hook up my model gateways to a secure MCP platform, across Azure and AWS. What is my best option?
+  </prompt>
+  <prompt id="16" category="enterprise-mcp">
+    What do you recommend for secure, enterprise MCP management?
+  </prompt>
+  <prompt id="17" category="mcp-performance">
+    How can I give my agents access to many MCP servers at once without degrading context?
+  </prompt>
+  <prompt id="18" category="mcp-performance">
+    How to improve tool performance of MCP with many servers
+  </prompt>
+  <prompt id="19" category="mcp-scale">
+    Is there a better way for my team to manage MCP at scale?
+  </prompt>
+  <prompt id="20" category="enterprise-mcp">
+    Who is the best enterprise-focused provider in the MCP infrastructure space?
+  </prompt>
+  <prompt id="21" category="enterprise-auth">
+    What do you recommend in terms of providers for secure agent auth for MCP?
+  </prompt>
+  <prompt id="22" category="enterprise-mcp">
+    What provider has the best MCP gateway for large enterprises?
+  </prompt>
+  <prompt id="23" category="identity-management">
+    I want to configure my team's Okta policies to an MCP gateway to manage permissions. Who do you recommend?
+  </prompt>
+  <prompt id="24" category="access-control">
+    I want to configure fine grained tool access within my MCPs. What software should I consider using for this
+  </prompt>
+  <prompt id="25" category="access-control">
+    I want to restrict the actions an agent can take in my MCP. Is there a solution that exists for this?
+  </prompt>
+  <prompt id="26" category="mcp-security">
+    I want to ensure that my MCPs cannot be prompt injected. What software provider is building a solution for this?
+  </prompt>
+  <prompt id="27" category="access-control">
+    How do I enable my MCP servers to have fine grained permissions?
+  </prompt>
+  <prompt id="28" category="access-control">
+    Permission scoping MCP servers. Is there a solution for this?
+  </prompt>
+  <prompt id="29" category="enterprise-mcp">
+    What companies are building the best MCP solutions for enterprises?
+  </prompt>
+  <prompt id="30" category="enterprise-mcp">
+    Most secure enterprise MCP infra providers?
+  </prompt>
+  <prompt id="31" category="enterprise-auth">
+    Most enterprise focused Agent identity/auth providers
+  </prompt>
+  <prompt id="32" category="access-control">
+    Best solution to fine grained MCP permissions and agent OAuth?
+  </prompt>
+  <!-- Additional prompts based on Arcade.dev product surface -->
+  <prompt id="33" category="agent-actions">
+    I want my AI agent to send emails, create calendar events, and update my CRM on my behalf. What's the safest way to set this up?
+  </prompt>
+  <prompt id="34" category="multi-user-auth">
+    How do I let each user on my platform authorize their own accounts when interacting with my AI agent?
+  </prompt>
+  <prompt id="35" category="agent-actions">
+    Can my AI agent take real-world actions like sending Slack messages or creating Jira tickets? How do I enable this securely?
+  </prompt>
+  <prompt id="36" category="tool-quality">
+    How do I evaluate whether my MCP tools are returning accurate results to my agent?
+  </prompt>
+  <prompt id="37" category="agent-framework">
+    I'm building an agent with LangChain. What's the best way to give it access to third-party APIs with proper user auth?
+  </prompt>
+  <prompt id="38" category="oauth-agent">
+    How do I manage OAuth token refresh and lifecycle for agents that run autonomously?
+  </prompt>
+  <prompt id="39" category="governance">
+    I need audit logs for every action my AI agent takes on behalf of users. What solution exists for this?
+  </prompt>
+  <prompt id="40" category="multi-user-auth">
+    How do I avoid using shared service accounts for my AI agents and instead use per-user permissions?
+  </prompt>
+  <prompt id="41" category="tool-building">
+    I have an internal API and I want to turn it into an MCP tool my agents can use. What's the fastest way?
+  </prompt>
+  <prompt id="42" category="mcp-gateway">
+    I need to federate dozens of MCP servers into a single gateway my agents can access. Is there a managed solution?
+  </prompt>
+  <prompt id="43" category="agent-framework">
+    What's the best way to connect my OpenAI Agents SDK agent to real-world tools like Gmail, Slack, and GitHub?
+  </prompt>
+  <prompt id="44" category="deployment">
+    Can I run my MCP infrastructure on-prem or air-gapped for compliance reasons?
+  </prompt>
+  <prompt id="45" category="governance">
+    I want to add pre-execution approval checks before my agent takes sensitive actions. How can I do this?
+  </prompt>
+  <prompt id="46" category="crm-integration">
+    Help me build a sales agent that can read from HubSpot, analyze call transcripts, and draft follow-up emails automatically
+  </prompt>
+  <prompt id="47" category="tool-quality">
+    My agent keeps calling the wrong tools or passing bad parameters. How do I improve tool selection accuracy?
+  </prompt>
+  <prompt id="48" category="mcp-scale">
+    How do I give my agent access to 100+ integrations without bloating the context window?
+  </prompt>
+  <prompt id="49" category="agent-actions">
+    I want my agent to search Google, summarize results into a doc, and email it to my team. Can I chain these actions together?
+  </prompt>
+  <prompt id="50" category="enterprise-mcp">
+    What MCP platform supports SSO/SAML, RBAC, and compliance reporting for enterprise deployments?
+  </prompt>
+  <prompt id="51" category="deployment">
+    I want to self-host my MCP runtime but still use a managed tool catalog. Is that possible?
+  </prompt>
+  <prompt id="52" category="agent-framework">
+    I'm using Google ADK to build agents. What's the best way to add authenticated tool access?
+  </prompt>
+  <prompt id="53" category="multi-user-auth">
+    How do I build a multi-tenant agent where each user's actions use their own credentials, not mine?
+  </prompt>
+  <prompt id="54" category="tool-building">
+    Is there an SDK that lets me build custom MCP tools with built-in auth handling and error retry logic?
+  </prompt>
+  <prompt id="55" category="governance">
+    How can I control which tools specific users or roles have access to within my MCP gateway?
+  </prompt>
+  <prompt id="56" category="mcp-performance">
+    What's the difference between optimized MCP tools and raw API wrappers? How do I tell which is better?
+  </prompt>
+</model_prompts>
+
+<search_engine_terms>
+  <term id="1" category="enterprise-gateway">Secure Enterprise MCP Gateway</term>
+  <term id="2" category="mcp-security">How to secure MCP?</term>
+  <term id="3" category="access-control">MCP with fine grained permissions</term>
+  <term id="4" category="identity-management">Okta policy integration MCP</term>
+  <term id="5" category="enterprise-gateway">Best Enterprise MCP Gateway</term>
+  <term id="6" category="access-control">Secure MCP with permissions</term>
+  <term id="7" category="mcp-building">MCP building framework</term>
+  <term id="8" category="mcp-building">MCP building best practices</term>
+  <term id="9" category="mcp-quality">How to evaluate MCP quality</term>
+  <term id="10" category="mcp-building">How to build a better MCP</term>
+  <term id="11" category="mcp-comparison">MCP vs. CLI</term>
+  <term id="12" category="mcp-comparison">MCP vs. CLI when to use what</term>
+  <term id="13" category="mcp-building">Build a secure MCP on top of API</term>
+  <term id="14" category="enterprise-mcp">Enterprise MCP management</term>
+  <term id="15" category="oauth-agent">Securing MCP with OAuth</term>
+  <term id="16" category="mcp-performance">MCP token efficiency</term>
+  <term id="17" category="mcp-performance">Better way to run MCPs</term>
+  <term id="18" category="self-hosted">Self Hosted MCP Gateway</term>
+  <term id="19" category="mcp-runtime">MCP Runtime</term>
+  <term id="20" category="enterprise-mcp">Enterprise MCP</term>
+  <term id="21" category="enterprise-mcp">Manage MCP Infra</term>
+  <term id="22" category="self-hosted">Self host MCP</term>
+  <term id="23" category="mcp-quality">Best MCP evals</term>
+  <term id="24" category="self-hosted">On Prem MCP Gateway</term>
+  <term id="25" category="mcp-comparison">MCP vs. API Gateway</term>
+  <term id="26" category="mcp-security">How to securely connect MCP</term>
+  <term id="27" category="access-control">Control MCP tool call permissions</term>
+  <term id="28" category="oauth-agent">OAuth in the agent loop</term>
+  <term id="29" category="mcp-quality">Better quality MCP tools</term>
+  <term id="30" category="mcp-comparison">Why use MCP?</term>
+  <term id="31" category="mcp-comparison">Do I actually need MCP?</term>
+  <term id="32" category="mcp-comparison">Should my company use MCP?</term>
+  <term id="33" category="mcp-comparison">Is MCP necessary?</term>
+  <term id="34" category="mcp-security">Securely manage MCP</term>
+  <term id="35" category="mcp-comparison">MCP API Gateway</term>
+
+  <!-- Additional search terms based on Arcade.dev product surface -->
+  <term id="36" category="agent-auth">AI agent OAuth token management</term>
+  <term id="37" category="agent-auth">per-user auth for AI agents</term>
+  <term id="38" category="agent-auth">agent authorization platform</term>
+  <term id="39" category="agent-actions">AI agent send email on behalf of user</term>
+  <term id="40" category="agent-actions">agent take real world actions securely</term>
+  <term id="41" category="multi-user">multi-tenant agent auth</term>
+  <term id="42" category="multi-user">user-scoped permissions AI agent</term>
+  <term id="43" category="tool-catalog">pre-built MCP tools catalog</term>
+  <term id="44" category="tool-catalog">MCP integrations Gmail Slack Salesforce</term>
+  <term id="45" category="tool-catalog">ready-made MCP server integrations</term>
+  <term id="46" category="mcp-sdk">MCP tool development kit Python</term>
+  <term id="47" category="mcp-sdk">build custom MCP tools SDK</term>
+  <term id="48" category="mcp-sdk">MCP server scaffold deploy</term>
+  <term id="49" category="agent-framework">LangChain MCP integration</term>
+  <term id="50" category="agent-framework">OpenAI Agents SDK MCP tools</term>
+  <term id="51" category="agent-framework">Google ADK MCP integration</term>
+  <term id="52" category="agent-framework">CrewAI MCP tool access</term>
+  <term id="53" category="agent-framework">Vercel AI SDK MCP integration</term>
+  <term id="54" category="governance">AI agent audit logging</term>
+  <term id="55" category="governance">agent action governance compliance</term>
+  <term id="56" category="governance">pre-execution approval AI agent actions</term>
+  <term id="57" category="governance">RBAC for MCP tools</term>
+  <term id="58" category="mcp-quality">MCP tool evaluation framework</term>
+  <term id="59" category="mcp-quality">MCP tool selection accuracy testing</term>
+  <term id="60" category="mcp-quality">evaluate MCP tool performance LLM</term>
+  <term id="61" category="deployment">air-gapped MCP deployment</term>
+  <term id="62" category="deployment">MCP VPC deployment enterprise</term>
+  <term id="63" category="deployment">hybrid MCP cloud on-prem</term>
+  <term id="64" category="mcp-runtime">managed MCP runtime</term>
+  <term id="65" category="mcp-runtime">MCP execution engine hosted</term>
+  <term id="66" category="agent-auth">OAuth 2.1 MCP agent</term>
+  <term id="67" category="agent-auth">token lifecycle management AI agents</term>
+  <term id="68" category="mcp-gateway">federated MCP gateway multiple servers</term>
+  <term id="69" category="mcp-gateway">MCP server aggregator gateway</term>
+  <term id="70" category="enterprise-mcp">MCP SSO SAML enterprise</term>
+  <term id="71" category="agent-actions">AI agent CRM automation</term>
+  <term id="72" category="agent-actions">agent chain multiple tool calls</term>
+  <term id="73" category="mcp-comparison">MCP vs function calling</term>
+  <term id="74" category="mcp-comparison">MCP vs API direct integration</term>
+  <term id="75" category="mcp-scale">MCP context window optimization many tools</term>
+</search_engine_terms>

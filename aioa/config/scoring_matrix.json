@@ -1,0 +1,22 @@
+{
+  "aio": {
+    "base_mentioned": 40,
+    "position": {
+      "first": 30,
+      "early": 20,
+      "middle": 10,
+      "late": 5,
+      "last": 2
+    },
+    "sentiment": {
+      "positive": 20,
+      "neutral": 10,
+      "negative": 0
+    },
+    "max_score": 100
+  },
+  "seo": {
+    "position_scores": [100, 80, 60, 40, 30, 20, 15, 10, 5, 2],
+    "not_found": 0
+  }
+}
