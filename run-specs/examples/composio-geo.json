@@ -1,0 +1,9 @@
+{
+  "run_type": "geo",
+  "target": "composio.dev",
+  "options": {
+    "description": "GEO-only audit for composio.dev: evidence collection + claim validation",
+    "coverage_preset": "exhaustive",
+    "discover_subdomains": true
+  }
+}

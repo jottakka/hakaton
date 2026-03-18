@@ -1,0 +1,10 @@
+{
+  "run_type": "aioa",
+  "target": "composio.dev",
+  "options": {
+    "description": "Full AIOA benchmark: LLM + search visibility for composio.dev",
+    "search_engines": ["google", "bing", "brave"],
+    "llm_providers": ["openai", "anthropic", "google"],
+    "coverage_preset": "standard"
+  }
+}
