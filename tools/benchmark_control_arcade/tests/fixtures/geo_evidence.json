@@ -1,0 +1,112 @@
+{
+  "target_url": "https://composio.dev",
+  "overall_score": 68,
+  "audit_mode": "exhaustive",
+  "claims": [
+    {
+      "lever": 1,
+      "lever_name": "Content structure and extractability",
+      "score": 18,
+      "strengths": [
+        "Homepage has clear H1 and H2 headings that describe the product.",
+        "Documentation pages use numbered step lists, which are highly extractable.",
+        "Several FAQ-style pages with concise question-answer pairs."
+      ],
+      "weaknesses": [
+        "Integration pages duplicate content patterns with little variation.",
+        "No structured data (JSON-LD) found on blog posts.",
+        "Several pages lack meta descriptions."
+      ],
+      "confidence": "high",
+      "recommendations": [
+        "Add JSON-LD Article markup to blog posts at https://composio.dev/blog/.",
+        "Add unique meta descriptions to all /integrations/* pages."
+      ]
+    },
+    {
+      "lever": 2,
+      "lever_name": "Entity authority",
+      "score": 15,
+      "strengths": [
+        "Company name 'Composio' is consistently used across the site.",
+        "Founder names appear in About page with roles."
+      ],
+      "weaknesses": [
+        "No Organization JSON-LD schema found on the homepage.",
+        "Backlink profile not directly assessable from on-site evidence.",
+        "Product entity lacks a Wikidata or schema.org/Product reference."
+      ],
+      "confidence": "medium",
+      "recommendations": [
+        "Add Organization JSON-LD to https://composio.dev/ with name, url, logo, sameAs.",
+        "Add Product JSON-LD to the main product landing page."
+      ]
+    },
+    {
+      "lever": 3,
+      "lever_name": "Technical accessibility",
+      "score": 17,
+      "strengths": [
+        "robots.txt exists at https://composio.dev/robots.txt and allows all crawlers.",
+        "Sitemap declared at https://composio.dev/sitemap.xml (HTTP 200).",
+        "Canonical tags present on sampled pages."
+      ],
+      "weaknesses": [
+        "No llms.txt found at https://composio.dev/llms.txt (HTTP 404).",
+        "Sitemap does not include /changelog/* pages."
+      ],
+      "confidence": "high",
+      "recommendations": [
+        "Create https://composio.dev/llms.txt to improve LLM discoverability.",
+        "Expand sitemap.xml to include /changelog/* and /blog/* pages."
+      ]
+    },
+    {
+      "lever": 4,
+      "lever_name": "Citation-worthiness",
+      "score": 18,
+      "strengths": [
+        "Comparison pages (e.g. vs LangChain) provide citable factual claims.",
+        "Integration count claims ('3000+ integrations') are prominent and specific.",
+        "Pricing page uses concrete tier names and limits."
+      ],
+      "weaknesses": [
+        "Most statistics lack source citations or footnotes.",
+        "No dedicated press or media kit page found."
+      ],
+      "confidence": "medium",
+      "recommendations": [
+        "Add source citations to statistics and comparison claims.",
+        "Create a press kit page at https://composio.dev/press/."
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "url": "https://composio.dev/",
+      "type": "page",
+      "summary": "Homepage. Clear H1: 'AI Integrations Platform'. No JSON-LD found. Meta description present."
+    },
+    {
+      "url": "https://composio.dev/robots.txt",
+      "type": "robots_txt",
+      "summary": "HTTP 200. User-agent: * Allow: /. Sitemap declared."
+    },
+    {
+      "url": "https://composio.dev/sitemap.xml",
+      "type": "sitemap",
+      "summary": "HTTP 200. Contains 142 URLs across /, /blog/, /integrations/, /docs/."
+    },
+    {
+      "url": "https://composio.dev/llms.txt",
+      "type": "llms_txt",
+      "summary": "HTTP 404. File not present."
+    },
+    {
+      "url": "https://composio.dev/blog/composio-vs-langchain/",
+      "type": "page",
+      "summary": "Comparison article. Citable claims about feature differences. No JSON-LD."
+    }
+  ],
+  "report_markdown": "# GEO Audit: composio.dev\n\n**Overall Score: 68 / 100**\n\n## Summary\n\ncomposio.dev scores well on content extractability and citation-worthiness but has clear gaps\nin technical LLM accessibility (no llms.txt) and entity authority (missing JSON-LD).\n\n## Lever 1 — Content Structure and Extractability (18/25)\n\nThe site uses clear headings and FAQ patterns. Integration pages are repetitive.\n\n## Lever 2 — Entity Authority (15/25)\n\nBrand consistency is good but structured entity data is absent.\n\n## Lever 3 — Technical Accessibility (17/25)\n\nrobots.txt and sitemap are healthy. llms.txt is missing.\n\n## Lever 4 — Citation-Worthiness (18/25)\n\nComparison and pricing pages provide strong citable claims but lack source references.\n\n## Top Recommendations\n\n1. Add llms.txt to improve LLM discoverability.\n2. Add Organization and Product JSON-LD to key pages.\n3. Add source citations to statistical claims.\n"
+}

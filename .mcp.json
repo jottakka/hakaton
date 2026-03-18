@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "geo-audit": {
+      "type": "http",
+      "url": "${GEO_AUDIT_MCP_URL}"
+    },
+    "geo-analyzer": {
+      "type": "http",
+      "url": "${GEO_ANALYZER_MCP_URL}"
+    },
+    "benchmark-control": {
+      "type": "stdio",
+      "command": "uv",
+      "args": ["run", "--project", "tools/benchmark_control_arcade", "benchmark-control-arcade"]
+    }
+  }
+}
