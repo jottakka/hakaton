@@ -38,7 +38,7 @@ jobs:
       - uses: astral-sh/setup-uv@v4
 
       - name: Sync benchmark_control_arcade deps
-        run: uv sync --project tools/benchmark_control_arcade
+        run: uv sync --project tools/benchmark_control_arcade --extra runners
 
       - name: Run benchmark
         env:
