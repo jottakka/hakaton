@@ -355,7 +355,7 @@ source = { editable = "." }
 dependencies = [
     { name = "aio-analyzer" },
     { name = "arcade-mcp-server" },
-    { name = "claude-agent-sdk" },
+    { name = "claude-agent-sdk", marker = "sys_platform == 'darwin'" },
     { name = "httpx" },
     { name = "pydantic" },
     { name = "pydantic-settings" },
@@ -375,7 +375,7 @@ dev = [
 requires-dist = [
     { name = "aio-analyzer", editable = "../../aioa" },
     { name = "arcade-mcp-server", specifier = ">=1.11.1,<2.0.0" },
-    { name = "claude-agent-sdk", specifier = ">=0.1.10" },
+    { name = "claude-agent-sdk", marker = "sys_platform == 'darwin'", specifier = ">=0.1.10" },
     { name = "httpx", specifier = ">=0.27.2,<1.0.0" },
     { name = "pydantic", specifier = ">=2.0.0" },
     { name = "pydantic-settings", specifier = ">=2.0.0" },
