@@ -1,0 +1,129 @@
+name: Deploy MCP Servers
+
+# Triggers:
+#   - Auto: any push to main that touches either server's code
+#   - Manual: workflow_dispatch lets you pick which server to redeploy
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/geo_audit_arcade/**"
+      - "tools/benchmark_control_arcade/src/**"
+      - "tools/benchmark_control_arcade/pyproject.toml"
+  workflow_dispatch:
+    inputs:
+      server:
+        description: "Which server to deploy"
+        required: false
+        default: "both"
+        type: choice
+        options: [both, geo_audit, benchmark_control]
+
+concurrency:
+  group: deploy-mcp
+  cancel-in-progress: false
+
+# ---------------------------------------------------------------------------
+# Shared setup — restores Arcade credentials from secret so arcade CLI works
+# ---------------------------------------------------------------------------
+env:
+  ARCADE_CREDENTIALS_B64: ${{ secrets.ARCADE_CREDENTIALS }}
+
+jobs:
+  # -------------------------------------------------------------------------
+  # GeoAudit — deploys when tools/geo_audit_arcade/** changes
+  # -------------------------------------------------------------------------
+  deploy-geo-audit:
+    name: Deploy GeoAudit to Arcade Cloud
+    runs-on: macos-latest
+    if: |
+      (github.event_name == 'workflow_dispatch' && (inputs.server == 'both' || inputs.server == 'geo_audit')) ||
+      github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Install Arcade CLI
+        run: pip install arcade-mcp==1.8.2
+
+      - name: Restore Arcade credentials
+        run: |
+          mkdir -p ~/.arcade
+          echo "${{ secrets.ARCADE_CREDENTIALS }}" | base64 --decode > ~/.arcade/credentials.yaml
+          arcade project set fd3339bd-0eee-4306-a838-8b2008dc6b3b
+
+      - name: Sync deps
+        run: uv sync --project tools/geo_audit_arcade
+
+      - name: Get server version
+        id: ver
+        run: |
+          VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('tools/geo_audit_arcade/pyproject.toml','rb'))['project']['version'])")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Deploy GeoAudit v${{ steps.ver.outputs.version }}
+        working-directory: tools/geo_audit_arcade
+        run: |
+          arcade deploy \
+            --entrypoint src/geo_audit_arcade/server.py \
+            --skip-validate \
+            --server-name GeoAudit \
+            --server-version ${{ steps.ver.outputs.version }} \
+            --secrets skip
+
+      - name: Sync GeoAudit secrets
+        run: |
+          arcade secret set ANTHROPIC_API_KEY="${{ secrets.ANTHROPIC_API_KEY }}"
+
+  # -------------------------------------------------------------------------
+  # BenchmarkControl — deploys when tools/benchmark_control_arcade/** changes
+  # -------------------------------------------------------------------------
+  deploy-benchmark-control:
+    name: Deploy BenchmarkControl to Arcade Cloud
+    runs-on: macos-latest
+    if: |
+      (github.event_name == 'workflow_dispatch' && (inputs.server == 'both' || inputs.server == 'benchmark_control')) ||
+      github.event_name == 'push'
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+
+      - name: Install Arcade CLI
+        run: pip install arcade-mcp==1.8.2
+
+      - name: Restore Arcade credentials
+        run: |
+          mkdir -p ~/.arcade
+          echo "${{ secrets.ARCADE_CREDENTIALS }}" | base64 --decode > ~/.arcade/credentials.yaml
+          arcade project set fd3339bd-0eee-4306-a838-8b2008dc6b3b
+
+      - name: Sync deps
+        run: uv sync --project tools/benchmark_control_arcade
+
+      - name: Get server version
+        id: ver
+        run: |
+          VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('tools/benchmark_control_arcade/pyproject.toml','rb'))['project']['version'])")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Deploy BenchmarkControl v${{ steps.ver.outputs.version }}
+        working-directory: tools/benchmark_control_arcade
+        run: |
+          arcade deploy \
+            --entrypoint src/benchmark_control_arcade/server.py \
+            --skip-validate \
+            --server-name BenchmarkControl \
+            --server-version ${{ steps.ver.outputs.version }} \
+            --secrets skip
+
+      - name: Sync BenchmarkControl secrets
+        run: |
+          arcade secret set \
+            GITHUB_TOKEN="${{ secrets.BENCHMARK_GITHUB_TOKEN }}" \
+            GITHUB_OWNER="ArcadeAI" \
+            GITHUB_REPO="${{ github.event.repository.name }}" \
+            GITHUB_DATA_BRANCH="benchmark-data" \
+            GITHUB_RUN_WORKFLOW="run-benchmark.yml" \
+            GEO_AUDIT_MCP_URL="${{ secrets.GEO_AUDIT_MCP_URL }}"
