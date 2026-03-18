@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -19,7 +19,7 @@ def _make_aioa_record(
     target: str = "composio.dev",
     summary: dict | None = None,
 ) -> RunRecord:
-    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)
+    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)
     return RunRecord(
         run_id=run_id,
         run_type=RunType.aioa,
@@ -35,7 +35,7 @@ def _make_aioa_record(
 
 
 def _make_geo_record(run_id: str = "run-geo") -> RunRecord:
-    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)
+    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)
     return RunRecord(
         run_id=run_id,
         run_type=RunType.geo,

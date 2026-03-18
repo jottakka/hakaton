@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import base64
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 import respx
@@ -37,7 +37,7 @@ def make_record(
     run_id: str = "run-123",
     status: RunStatus = RunStatus.queued,
 ) -> RunRecord:
-    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)
+    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)
     return RunRecord(
         run_id=run_id,
         run_type=RunType.aioa,
@@ -72,9 +72,7 @@ async def test_create_initial_run_record_writes_queued_status() -> None:
     path = "runs/2026/03/18/run-123/run.json"
     url = f"{BASE_URL}/repos/acme/benchmarks/contents/{path}"
 
-    put_route = respx.put(url).mock(
-        return_value=Response(201, json={"content": {"sha": "abc123"}})
-    )
+    put_route = respx.put(url).mock(return_value=Response(201, json={"content": {"sha": "abc123"}}))
 
     client = GitHubClient(settings)
     await client.create_initial_run_record(record)
@@ -193,7 +191,7 @@ async def test_get_run_record_parses_response() -> None:
     client = GitHubClient(settings)
     result = await client.get_run_record(
         run_id="run-123",
-        created_at=datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc),
+        created_at=datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC),
     )
 
     assert isinstance(result, RunRecord)
@@ -214,8 +212,8 @@ async def test_list_run_records_returns_newest_first() -> None:
 
     settings = make_settings()
 
-    older_dt = datetime(2026, 3, 17, 10, 0, 0, tzinfo=timezone.utc)
-    newer_dt = datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)
+    older_dt = datetime(2026, 3, 17, 10, 0, 0, tzinfo=UTC)
+    newer_dt = datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)
 
     older_record = RunRecord(
         run_id="run-older",

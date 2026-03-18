@@ -2,13 +2,13 @@
 
 from __future__ import annotations
 
-import asyncio
 import json
 import logging
 import os
+from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from datetime import datetime, timezone
-from typing import Any, AsyncIterator
+from datetime import UTC, datetime
+from typing import Any
 
 import httpx
 from dotenv import load_dotenv
@@ -21,10 +21,39 @@ load_dotenv()
 logging.getLogger("mcp.client.streamable_http").setLevel(logging.ERROR)
 
 # ---------------------------------------------------------------------------
-# MCP session management
+# Security constants
 # ---------------------------------------------------------------------------
 
+_ALLOWED_MCP_HOSTS: frozenset[str] = frozenset({
+    "api.arcade.dev",
+    "localhost",
+    "127.0.0.1",
+})
+
 _MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "https://api.arcade.dev/mcp/aio")
+
+
+def _validate_mcp_server_url(url: str) -> None:
+    """Raise ValueError if *url* is not an approved HTTPS endpoint."""
+    from urllib.parse import urlparse  # noqa: PLC0415
+
+    parsed = urlparse(url)
+    if parsed.scheme != "https":
+        raise ValueError(
+            f"MCP_SERVER_URL must use https:// scheme (got scheme={parsed.scheme!r}). "
+            "Only HTTPS connections to approved hosts are permitted."
+        )
+    if parsed.hostname not in _ALLOWED_MCP_HOSTS:
+        raise ValueError(
+            f"MCP_SERVER_URL host is not on the approved allowlist "
+            f"(host={parsed.hostname!r}). "
+            f"Allowed hosts: {sorted(_ALLOWED_MCP_HOSTS)}"
+        )
+
+
+# ---------------------------------------------------------------------------
+# MCP session management
+# ---------------------------------------------------------------------------
 
 
 def _build_mcp_http_client() -> httpx.AsyncClient:
@@ -41,12 +70,26 @@ def _build_mcp_http_client() -> httpx.AsyncClient:
 
 @asynccontextmanager
 async def mcp_session() -> AsyncIterator[ClientSession]:
-    """Open a single MCP session that can be reused for many tool calls."""
+    """Open a single MCP session that can be reused for many tool calls.
+
+    Raises EnvironmentError if ARCADE_API_KEY is not set or empty.
+    Raises ValueError if MCP_SERVER_URL is not on the approved allowlist.
+    """
+    api_key = os.environ.get("ARCADE_API_KEY", "")
+    if not api_key:
+        raise EnvironmentError(
+            "ARCADE_API_KEY is required but not set. "
+            "Set the ARCADE_API_KEY environment variable before running searches."
+        )
+    mcp_server_url = os.environ.get("MCP_SERVER_URL", _MCP_SERVER_URL)
+    _validate_mcp_server_url(mcp_server_url)
     http_client = _build_mcp_http_client()
-    async with streamable_http_client(_MCP_SERVER_URL, http_client=http_client) as (read, write, _):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
-            yield session
+    async with (
+        streamable_http_client(mcp_server_url, http_client=http_client) as (read, write, _),
+        ClientSession(read, write) as session,
+    ):
+        await session.initialize()
+        yield session
 
 
 # ---------------------------------------------------------------------------
@@ -76,12 +119,14 @@ def _parse_search_response(tool_result: Any) -> list[dict[str, Any]]:
 
     results: list[dict[str, Any]] = []
     for i, item in enumerate(items, start=1):
-        results.append({
-            "position": item.get("position", i),
-            "title": item.get("title", ""),
-            "url": item.get("link", item.get("url", "")),
-            "snippet": item.get("snippet", item.get("description", "")),
-        })
+        results.append(
+            {
+                "position": item.get("position", i),
+                "title": item.get("title", ""),
+                "url": item.get("link", item.get("url", "")),
+                "snippet": item.get("snippet", item.get("description", "")),
+            }
+        )
     return results
 
 
@@ -96,7 +141,9 @@ async def _run_mcp_search(query: str, num_results: int = 10) -> list[dict[str, A
 
 
 async def _run_mcp_search_with_session(
-    session: ClientSession, query: str, num_results: int = 10,
+    session: ClientSession,
+    query: str,
+    num_results: int = 10,
 ) -> list[dict[str, Any]]:
     """Search using an already-open MCP session (no extra connect/disconnect)."""
     tool_result = await session.call_tool(
@@ -116,7 +163,11 @@ _ENGINES = {
 
 
 async def run_search(
-    term_id: str, query: str, engine: str, *, session: ClientSession | None = None,
+    term_id: str,
+    query: str,
+    engine: str,
+    *,
+    session: ClientSession | None = None,
 ) -> dict[str, Any]:
     """
     Run a search query against a single engine.
@@ -138,14 +189,17 @@ async def run_search(
         "engine": engine,
         "term_id": term_id,
         "results": results,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "status": "ok",
         "error": None,
     }
 
 
 async def run_all_searches(
-    term_id: str, query: str, *, session: ClientSession | None = None,
+    term_id: str,
+    query: str,
+    *,
+    session: ClientSession | None = None,
 ) -> list[dict[str, Any]]:
     """Fan out a search term to all engines.
 
@@ -159,12 +213,14 @@ async def run_all_searches(
             results.append(outcome)
         except Exception as exc:
             print(f"[search] WARN {engine_name}/{term_id} failed: {exc}")
-            results.append({
-                "engine": engine_name,
-                "term_id": term_id,
-                "results": [],
-                "timestamp": datetime.now(timezone.utc).isoformat(),
-                "status": "failed",
-                "error": str(exc),
-            })
+            results.append(
+                {
+                    "engine": engine_name,
+                    "term_id": term_id,
+                    "results": [],
+                    "timestamp": datetime.now(UTC).isoformat(),
+                    "status": "failed",
+                    "error": str(exc),
+                }
+            )
     return results

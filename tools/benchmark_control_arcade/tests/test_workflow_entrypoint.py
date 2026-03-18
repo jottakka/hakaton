@@ -9,17 +9,17 @@ Strategy:
 """
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
 from benchmark_control_arcade.run_models import RunRecord, RunSpec, RunStatus, RunType
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _make_settings():
     from benchmark_control_arcade.config import Settings
@@ -34,7 +34,7 @@ def _make_settings():
 
 
 def _make_record(run_id: str, run_type: RunType, status: RunStatus = RunStatus.queued) -> RunRecord:
-    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)
+    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)
     return RunRecord(
         run_id=run_id,
         run_type=run_type,
@@ -54,6 +54,16 @@ def _aioa_spec_json() -> str:
 
 def _geo_spec_json() -> str:
     return json.dumps({"run_type": "geo", "target": "composio.dev", "options": {}})
+
+
+def _geo_compare_spec_json() -> str:
+    return json.dumps(
+        {
+            "run_type": "geo_compare",
+            "target": "arcade.dev",
+            "options": {"competitors": ["composio.dev"]},
+        }
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -147,6 +157,60 @@ async def test_run_workflow_routes_to_geo_runner():
         await run_workflow(run_id, "geo", spec_json)
 
     mock_geo.assert_awaited_once()
+    mock_aioa.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_run_workflow_routes_to_geo_compare_runner():
+    """run_type='geo_compare' must call geo_compare_runner.run_geo_compare_benchmark."""
+    run_id = "run-geo-compare-001"
+    spec_json = _geo_compare_spec_json()
+
+    initial_record = _make_record(run_id, RunType.geo_compare, RunStatus.queued)
+    geo_compare_result = {
+        "run_id": run_id,
+        "artifacts": [],
+        "summary": {
+            "target": "arcade.dev",
+            "competitors": ["composio.dev"],
+            "overall_winner": "arcade.dev",
+        },
+    }
+
+    mock_settings = _make_settings()
+    mock_client = AsyncMock()
+    mock_client.get_run_record = AsyncMock(return_value=initial_record)
+    mock_client.update_run_record = AsyncMock()
+
+    with (
+        patch(
+            "benchmark_control_arcade.workflow_entrypoint.Settings",
+            return_value=mock_settings,
+        ),
+        patch(
+            "benchmark_control_arcade.workflow_entrypoint.GitHubClient",
+            return_value=mock_client,
+        ),
+        patch(
+            "benchmark_control_arcade.workflow_entrypoint.aioa_runner.run_aioa_benchmark",
+            new_callable=AsyncMock,
+        ) as mock_aioa,
+        patch(
+            "benchmark_control_arcade.workflow_entrypoint.geo_runner.run_geo_benchmark",
+            new_callable=AsyncMock,
+        ) as mock_geo,
+        patch(
+            "benchmark_control_arcade.workflow_entrypoint.geo_compare_runner.run_geo_compare_benchmark",
+            new_callable=AsyncMock,
+            return_value=geo_compare_result,
+        ) as mock_geo_compare,
+    ):
+        from benchmark_control_arcade.workflow_entrypoint import run_workflow
+
+        await run_workflow(run_id, "geo_compare", spec_json)
+
+    mock_geo_compare.assert_awaited_once()
+    mock_geo.assert_not_awaited()
     mock_aioa.assert_not_awaited()
 
 
@@ -304,7 +368,6 @@ async def test_run_workflow_running_before_failed():
 
 def test_module_has_main_block():
     """workflow_entrypoint.py must be runnable as __main__."""
-    import importlib.util
     import pathlib
 
     path = (
@@ -360,7 +423,7 @@ async def test_entrypoint_finds_run_when_queued_near_midnight():
     run_id = "run-20200101235900-abc12345"
     spec_json = _aioa_spec_json()
 
-    queued_at = datetime(2020, 1, 1, 23, 59, 0, tzinfo=timezone.utc)
+    queued_at = datetime(2020, 1, 1, 23, 59, 0, tzinfo=UTC)
     initial_record = RunRecord(
         run_id=run_id,
         run_type=RunType.aioa,
@@ -428,7 +491,7 @@ async def test_run_workflow_uploads_artifacts_to_data_branch():
 
     initial_record = _make_record(run_id, RunType.aioa, RunStatus.queued)
     initial_record = initial_record.model_copy(
-        update={"created_at": datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)}
+        update={"created_at": datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)}
     )
 
     mock_settings = _make_settings()
@@ -481,8 +544,7 @@ async def test_run_workflow_uploads_artifacts_to_data_branch():
     put_file_calls = mock_client._put_file.call_args_list
     artifact_uploads = [c for c in put_file_calls if "artifacts/" in str(c.args[0])]
     assert len(artifact_uploads) >= 1, (
-        "Expected at least one _put_file call for an artifact path, "
-        f"got calls: {put_file_calls}"
+        f"Expected at least one _put_file call for an artifact path, got calls: {put_file_calls}"
     )
 
     # The completed RunRecord must include the artifact with the data-branch path.

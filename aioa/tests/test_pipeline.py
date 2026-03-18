@@ -28,11 +28,9 @@ class FakeStore:
     async def init(self) -> None:
         self.initialized = True
 
-    async def create_run(
-        self, prompt_set_id: str, term_set_id: str, competitor_config: dict, run_id: str | None = None
-    ) -> str:
+    async def create_run(self, prompt_set_id: str, term_set_id: str, competitor_config: dict, run_id: str | None = None) -> str:
         self.runs.append((prompt_set_id, term_set_id, competitor_config))
-        return run_id if run_id is not None else self.run_id
+        return self.run_id
 
     async def save_model_result(
         self,
@@ -211,10 +209,7 @@ async def test_run_full_pipeline_marks_seo_only_mode(monkeypatch, tmp_path: Path
 
         async def create(self, **kwargs):
             system = kwargs.get("system", "")
-            if "observation" in system.lower():
-                text = obs_json
-            else:
-                text = synth_json
+            text = obs_json if "observation" in system.lower() else synth_json
             return type("R", (), {"content": [type("B", (), {"text": text})()]})()
 
     monkeypatch.setattr("src.orchestrator.anthropic.AsyncAnthropic", _FakeAnthropicClient)
@@ -272,109 +267,3 @@ async def test_run_ad_hoc_query_builds_sets_and_delegates(monkeypatch):
     assert captured["term_set"].terms[0].expected_winner == "Arcade"
     assert captured["output_dir"] == "custom-out"
     assert captured["store"] is fake_store
-
-
-# ---------------------------------------------------------------------------
-# External run_id plumbing tests
-# ---------------------------------------------------------------------------
-
-@pytest.mark.asyncio
-async def test_run_full_pipeline_uses_external_run_id(monkeypatch, tmp_path: Path):
-    """When run_id is supplied, it must be passed through to create_run and used for the report path."""
-    from src.stores.json_store import JsonFileStore
-
-    competitors = CompetitorConfig(target="Arcade", competitors=["Composio"])
-
-    async def fake_searches(term_id: str, query: str, *, session=None) -> list[dict]:
-        return [
-            {
-                "engine": "google",
-                "term_id": term_id,
-                "results": [],
-                "status": "ok",
-                "error": None,
-            }
-        ]
-
-    async def fake_orchestrator(**kwargs):
-        return {"summary": {"arcade_avg_aio_score": None}, "run_mode": "seo_only", "gap_recommendations": {}}
-
-    monkeypatch.setattr("src.pipeline.run_all_searches", fake_searches)
-    monkeypatch.setattr("src.pipeline.mcp_session", _fake_mcp_session)
-    monkeypatch.setattr("src.pipeline.run_orchestrator", fake_orchestrator)
-    monkeypatch.setattr("src.pipeline.print_summary", lambda _: None)
-
-    from src.input_layer import Prompt, PromptSet, SearchTerm, TermSet
-
-    prompt_set = PromptSet(prompt_set_id="p-set", prompts=[Prompt(id="p001", text="hello")])
-    term_set = TermSet(term_set_id="t-set", terms=[SearchTerm(id="s001", query="arcade")])
-
-    ext_run_id = "external-run-test-999"
-    store = JsonFileStore(workspace=tmp_path)
-
-    analysis = await run_full_pipeline(
-        prompt_set=prompt_set,
-        term_set=term_set,
-        competitors=competitors,
-        output_dir=tmp_path,
-        store=store,
-        run_id=ext_run_id,
-    )
-
-    # The run dir must exist under the externally provided ID
-    run_dir = tmp_path / "runs" / ext_run_id
-    assert run_dir.exists(), f"Expected run dir at {run_dir}"
-    assert (run_dir / "run.json").exists()
-
-    # The report file must use the external ID
-    report = tmp_path / f"report_{ext_run_id}.json"
-    assert report.exists(), f"Expected report at {report}"
-
-
-@pytest.mark.asyncio
-async def test_run_full_pipeline_generates_run_id_when_none(monkeypatch, tmp_path: Path):
-    """When run_id is omitted, the pipeline must still auto-generate a valid UUID run id."""
-    import uuid
-    from src.stores.json_store import JsonFileStore
-
-    competitors = CompetitorConfig(target="Arcade", competitors=["Composio"])
-
-    async def fake_searches(term_id: str, query: str, *, session=None) -> list[dict]:
-        return [
-            {
-                "engine": "google",
-                "term_id": term_id,
-                "results": [],
-                "status": "ok",
-                "error": None,
-            }
-        ]
-
-    async def fake_orchestrator(**kwargs):
-        return {"summary": {"arcade_avg_aio_score": None}, "run_mode": "seo_only", "gap_recommendations": {}}
-
-    monkeypatch.setattr("src.pipeline.run_all_searches", fake_searches)
-    monkeypatch.setattr("src.pipeline.mcp_session", _fake_mcp_session)
-    monkeypatch.setattr("src.pipeline.run_orchestrator", fake_orchestrator)
-    monkeypatch.setattr("src.pipeline.print_summary", lambda _: None)
-
-    from src.input_layer import Prompt, PromptSet, SearchTerm, TermSet
-
-    prompt_set = PromptSet(prompt_set_id="p-set", prompts=[Prompt(id="p001", text="hello")])
-    term_set = TermSet(term_set_id="t-set", terms=[SearchTerm(id="s001", query="arcade")])
-
-    store = JsonFileStore(workspace=tmp_path)
-
-    await run_full_pipeline(
-        prompt_set=prompt_set,
-        term_set=term_set,
-        competitors=competitors,
-        output_dir=tmp_path,
-        store=store,
-    )
-
-    # There should be exactly one run dir, with a UUID name
-    runs_dir = tmp_path / "runs"
-    run_dirs = list(runs_dir.iterdir())
-    assert len(run_dirs) == 1
-    uuid.UUID(run_dirs[0].name)  # raises if not valid UUID

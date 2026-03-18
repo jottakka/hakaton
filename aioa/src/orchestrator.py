@@ -12,7 +12,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import anthropic
@@ -45,6 +45,7 @@ def _extract_results(record: dict[str, Any]) -> list[dict[str, Any]]:
         except json.JSONDecodeError:
             raw = []
     return raw if isinstance(raw, list) else []
+
 
 # ---------------------------------------------------------------------------
 # Batching
@@ -97,12 +98,14 @@ def batch_items(
     for i in range(max_len):
         bp, bm = prompt_batches[i] if i < len(prompt_batches) else ([], [])
         bt, bs = term_batches[i] if i < len(term_batches) else ([], [])
-        batches.append({
-            "prompts": bp,
-            "model_results": bm,
-            "terms": bt,
-            "search_results": bs,
-        })
+        batches.append(
+            {
+                "prompts": bp,
+                "model_results": bm,
+                "terms": bt,
+                "search_results": bs,
+            }
+        )
 
     return batches
 
@@ -181,8 +184,7 @@ def _score_aio_batch(
             mentions = detect_mentions(mr["raw_response"], target, competitors)
             mentions_by_model[model_name] = mentions
             by_model_scores[model_name] = {
-                company: calculate_aio_score(m, matrix=matrix)
-                for company, m in mentions.items()
+                company: calculate_aio_score(m, matrix=matrix) for company, m in mentions.items()
             }
 
         all_companies = [target] + competitors
@@ -191,20 +193,22 @@ def _score_aio_batch(
             scores = [by_model_scores[m].get(company, 0) for m in by_model_scores]
             aggregate[company] = round(sum(scores) / max(len(scores), 1)) if scores else 0
 
-        results.append({
-            "prompt_id": pid,
-            "prompt_text": prompt.get("text", ""),
-            "category": prompt.get("category", ""),
-            "expected_winner": prompt.get("expected_winner", target),
-            "by_model": {
-                model_name: {
-                    "mentions": mentions_by_model.get(model_name, {}),
-                    "scores": by_model_scores.get(model_name, {}),
-                }
-                for model_name in by_model_scores
-            },
-            "aggregate_score": aggregate,
-        })
+        results.append(
+            {
+                "prompt_id": pid,
+                "prompt_text": prompt.get("text", ""),
+                "category": prompt.get("category", ""),
+                "expected_winner": prompt.get("expected_winner", target),
+                "by_model": {
+                    model_name: {
+                        "mentions": mentions_by_model.get(model_name, {}),
+                        "scores": by_model_scores.get(model_name, {}),
+                    }
+                    for model_name in by_model_scores
+                },
+                "aggregate_score": aggregate,
+            }
+        )
 
     return results
 
@@ -236,16 +240,18 @@ def _score_seo_batch(
             term_status = "ok"
 
         if term_status == "failed":
-            results.append({
-                "term_id": tid,
-                "query": term.get("query", ""),
-                "category": term.get("category", ""),
-                "expected_winner": term.get("expected_winner", target),
-                "by_engine": {},
-                "aggregate_score": None,
-                "status": "failed",
-                "failed_engines": failed_engines,
-            })
+            results.append(
+                {
+                    "term_id": tid,
+                    "query": term.get("query", ""),
+                    "category": term.get("category", ""),
+                    "expected_winner": term.get("expected_winner", target),
+                    "by_engine": {},
+                    "aggregate_score": None,
+                    "status": "failed",
+                    "failed_engines": failed_engines,
+                }
+            )
             continue
 
         rankings_by_engine: dict[str, dict[str, Any]] = {}
@@ -258,8 +264,7 @@ def _score_seo_batch(
             rankings = extract_rankings(raw_results, target, competitors)
             rankings_by_engine[engine] = rankings
             by_engine_scores[engine] = {
-                company: calculate_seo_score(r, matrix=matrix)
-                for company, r in rankings.items()
+                company: calculate_seo_score(r, matrix=matrix) for company, r in rankings.items()
             }
 
         all_companies = [target] + competitors
@@ -306,7 +311,7 @@ async def _get_observations(
     _MAX_RESPONSE_CHARS = 800
     for aio in aio_results:
         pid = aio["prompt_id"]
-        sections.append(f"### Prompt {pid}: \"{aio['prompt_text']}\"")
+        sections.append(f'### Prompt {pid}: "{aio["prompt_text"]}"')
         sections.append(f"Scores: {json.dumps(aio['aggregate_score'])}")
         for mr in batch["model_results"]:
             if mr["prompt_id"] == pid:
@@ -318,7 +323,7 @@ async def _get_observations(
         if seo.get("status") == "failed":
             continue
         tid = seo["term_id"]
-        sections.append(f"### Term {tid}: \"{seo['query']}\"")
+        sections.append(f'### Term {tid}: "{seo["query"]}"')
         sections.append(f"Scores: {json.dumps(seo['aggregate_score'])}")
         for sr in batch["search_results"]:
             if sr["term_id"] == tid and sr.get("status", "ok") == "ok":
@@ -342,7 +347,7 @@ async def _get_observations(
         json_text = raw_text.strip()
         if json_text.startswith("```"):
             lines = json_text.split("\n")
-            lines = [l for l in lines if not l.strip().startswith("```")]
+            lines = [line for line in lines if not line.strip().startswith("```")]
             json_text = "\n".join(lines)
         parsed = json.loads(json_text)
         return parsed.get("observations", {})
@@ -381,26 +386,32 @@ def merge_subagent_results(
 
     aio_aggregates = [item["aggregate_score"] for item in all_aio]
     seo_ok = [item for item in all_seo if item.get("status", "ok") != "failed"]
-    seo_aggregates = [item["aggregate_score"] for item in seo_ok if item["aggregate_score"] is not None]
+    seo_aggregates = [
+        item["aggregate_score"] for item in seo_ok if item["aggregate_score"] is not None
+    ]
     comparison = build_comparison_matrix(aio_aggregates, seo_aggregates, target, competitors)
 
     scored_items = []
     for item in all_aio:
-        scored_items.append({
-            "id": item["prompt_id"],
-            "type": "aio",
-            "text": item.get("prompt_text", ""),
-            "expected_winner": item.get("expected_winner", target),
-            "aggregate": item["aggregate_score"],
-        })
+        scored_items.append(
+            {
+                "id": item["prompt_id"],
+                "type": "aio",
+                "text": item.get("prompt_text", ""),
+                "expected_winner": item.get("expected_winner", target),
+                "aggregate": item["aggregate_score"],
+            }
+        )
     for item in seo_ok:
-        scored_items.append({
-            "id": item["term_id"],
-            "type": "seo",
-            "text": item.get("query", ""),
-            "expected_winner": item.get("expected_winner", target),
-            "aggregate": item["aggregate_score"],
-        })
+        scored_items.append(
+            {
+                "id": item["term_id"],
+                "type": "seo",
+                "text": item.get("query", ""),
+                "expected_winner": item.get("expected_winner", target),
+                "aggregate": item["aggregate_score"],
+            }
+        )
 
     gaps = find_gaps(scored_items, target)
 
@@ -471,7 +482,7 @@ async def run_synthesis(
         json_text = raw_text.strip()
         if json_text.startswith("```"):
             lines = json_text.split("\n")
-            lines = [l for l in lines if not l.strip().startswith("```")]
+            lines = [line for line in lines if not line.strip().startswith("```")]
             json_text = "\n".join(lines)
         return json.loads(json_text)
     except Exception as exc:
@@ -518,10 +529,7 @@ async def run_orchestrator(
     batches = batch_items(prompts, model_results, terms, search_results)
     print(f"[orchestrator] Created {len(batches)} batches (mode={run_mode})")
 
-    subagent_tasks = [
-        run_subagent(batch, target, competitors, matrix)
-        for batch in batches
-    ]
+    subagent_tasks = [run_subagent(batch, target, competitors, matrix) for batch in batches]
     subagent_outputs = await asyncio.gather(*subagent_tasks)
     print(f"[orchestrator] All {len(subagent_outputs)} subagents complete")
 
@@ -543,7 +551,7 @@ async def run_orchestrator(
 
     analysis = {
         "run_id": run_id,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "generated_at": datetime.now(UTC).isoformat(),
         "run_mode": run_mode,
         "summary": summary,
         "aio_results": merged["aio_results"],

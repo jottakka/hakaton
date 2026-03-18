@@ -104,9 +104,9 @@ async def test_run_mcp_search_raises_on_error():
     with (
         patch("src.search.streamable_http_client", return_value=fake_transport),
         patch("src.search.ClientSession", return_value=fake_session),
+        pytest.raises(RuntimeError, match="MCP search failed"),
     ):
-        with pytest.raises(RuntimeError, match="MCP search failed"):
-            await _run_mcp_search("test")
+        await _run_mcp_search("test")
 
 
 @pytest.mark.asyncio

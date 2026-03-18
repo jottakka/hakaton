@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 import os
 import time
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import Any
 
 import anthropic
@@ -78,7 +78,7 @@ async def run_model_prompt(prompt_id: str, prompt_text: str, model: str) -> dict
         "model": model,
         "prompt_id": prompt_id,
         "raw_response": raw_response,
-        "timestamp": datetime.now(timezone.utc).isoformat(),
+        "timestamp": datetime.now(UTC).isoformat(),
         "latency_ms": latency_ms,
     }
 
@@ -94,7 +94,7 @@ async def run_all_models(prompt_id: str, prompt_text: str) -> list[dict[str, Any
         return_exceptions=True,
     )
     results = []
-    for model_name, outcome in zip(_RUNNERS, outcomes):
+    for model_name, outcome in zip(_RUNNERS, outcomes, strict=True):
         if isinstance(outcome, BaseException):
             print(f"[models] WARN {model_name}/{prompt_id} failed: {outcome}")
         else:

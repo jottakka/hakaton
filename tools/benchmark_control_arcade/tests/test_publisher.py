@@ -11,21 +11,18 @@ Validates:
 """
 
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-
-import pytest
 
 from benchmark_control_arcade.history_layout import build_run_layout
 from benchmark_control_arcade.run_models import RunArtifact
-
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
 RUN_ID = "run-pub-test-001"
-CREATED_AT = datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)
+CREATED_AT = datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)
 
 
 def make_publisher(tmp_path: Path):
@@ -83,7 +80,9 @@ def test_write_artifact_returns_run_artifact_with_relative_path(tmp_path: Path):
 
     # path must be relative (not absolute)
     artifact_path = Path(artifact.path)
-    assert not artifact_path.is_absolute(), f"artifact path should be relative, got: {artifact.path}"
+    assert not artifact_path.is_absolute(), (
+        f"artifact path should be relative, got: {artifact.path}"
+    )
 
     # the file must actually exist on disk
     abs_path = tmp_path / artifact_path
@@ -111,8 +110,8 @@ def test_artifacts_returns_all_registered_artifacts(tmp_path: Path):
     """artifacts() must return all artifacts registered via write_artifact."""
     pub = make_publisher(tmp_path)
 
-    art1 = pub.write_artifact("file1.json", b'{"a": 1}')
-    art2 = pub.write_artifact("file2.bin", b"\x00\x01\x02")
+    _art1 = pub.write_artifact("file1.json", b'{"a": 1}')
+    _art2 = pub.write_artifact("file2.bin", b"\x00\x01\x02")
 
     result = pub.artifacts()
 

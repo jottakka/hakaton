@@ -10,10 +10,10 @@ import pytest
 from benchmark_control_arcade.aioa_runner import run_aioa_benchmark
 from benchmark_control_arcade.run_models import RunSpec, RunType
 
-
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
+
 
 def _make_spec(target: str = "Arcade", **options) -> RunSpec:
     return RunSpec(run_type=RunType.aioa, target=target, options=options)
@@ -22,6 +22,7 @@ def _make_spec(target: str = "Arcade", **options) -> RunSpec:
 # ---------------------------------------------------------------------------
 # Happy-path tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_run_aioa_benchmark_returns_run_id(tmp_path: Path, monkeypatch):
@@ -63,7 +64,7 @@ async def test_run_aioa_benchmark_writes_output_under_run_id_dir(tmp_path: Path,
         fake_pipeline,
     )
 
-    result = await run_aioa_benchmark(spec=spec, run_id=run_id, output_dir=tmp_path)
+    _ = await run_aioa_benchmark(spec=spec, run_id=run_id, output_dir=tmp_path)
 
     # output_dir / run_id should exist
     run_output_dir = tmp_path / run_id

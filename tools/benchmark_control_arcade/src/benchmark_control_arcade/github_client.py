@@ -14,7 +14,7 @@ from __future__ import annotations
 import base64
 import json
 import logging
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Any
 
 import httpx
@@ -31,11 +31,9 @@ _GITHUB_API = "https://api.github.com"
 
 def _is_transient(exc: BaseException) -> bool:
     """Return True for errors worth retrying (network issues, 5xx)."""
-    if isinstance(exc, httpx.TransportError):
-        return True
-    if isinstance(exc, GitHubHTTPError) and exc.status_code >= 500:
-        return True
-    return False
+    return isinstance(exc, httpx.TransportError) or (
+        isinstance(exc, GitHubHTTPError) and exc.status_code >= 500
+    )
 
 
 class GitHubHTTPError(Exception):
@@ -102,10 +100,7 @@ class GitHubClient:
         )
 
     def _tree_url(self) -> str:
-        return (
-            f"{_GITHUB_API}/repos/{self._owner}/{self._repo}"
-            f"/git/trees/{self._data_branch}"
-        )
+        return f"{_GITHUB_API}/repos/{self._owner}/{self._repo}/git/trees/{self._data_branch}"
 
     # ------------------------------------------------------------------
     # Low-level GET/PUT with retry
@@ -218,9 +213,7 @@ class GitHubClient:
         await self._put_file(path, content_b64, message, sha=sha)
         logger.info("Updated run record for %s (status=%s)", record.run_id, record.status)
 
-    async def dispatch_workflow(
-        self, run_id: str, run_type: str, run_spec_json: str
-    ) -> None:
+    async def dispatch_workflow(self, run_id: str, run_type: str, run_spec_json: str) -> None:
         """Dispatch the benchmark workflow with the given run inputs.
 
         The run record MUST already exist on the data branch before calling

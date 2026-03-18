@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import base64
 import json
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -19,7 +19,7 @@ from benchmark_control_arcade.run_models import (
 
 
 def _make_record(run_id: str = "run-abc", run_type: RunType = RunType.aioa) -> RunRecord:
-    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=timezone.utc)
+    now = datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC)
     return RunRecord(
         run_id=run_id,
         run_type=run_type,

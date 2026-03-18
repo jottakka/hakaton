@@ -7,20 +7,21 @@ single source of truth written to and read from the data branch.
 from __future__ import annotations
 
 from datetime import datetime
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 from pydantic import BaseModel, Field
 
 
-class RunType(str, Enum):
+class RunType(StrEnum):
     """The class of benchmark being run."""
 
     aioa = "aioa"
     geo = "geo"
+    geo_compare = "geo_compare"
 
 
-class RunStatus(str, Enum):
+class RunStatus(StrEnum):
     """Lifecycle state of a benchmark run."""
 
     queued = "queued"

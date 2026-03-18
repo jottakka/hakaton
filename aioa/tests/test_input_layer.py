@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import tempfile
 from pathlib import Path
 
 import pytest
@@ -111,5 +110,5 @@ class TestLoadFunctions:
     def test_load_competitors_invalid(self, tmp_path: Path):
         path = tmp_path / "bad.json"
         path.write_text('{"bad": "data"}')
-        with pytest.raises(Exception):
+        with pytest.raises((ValueError, KeyError)):
             load_competitors(path)

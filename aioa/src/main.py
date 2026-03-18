@@ -13,16 +13,19 @@ import sys
 
 from dotenv import load_dotenv
 
-load_dotenv()
-
 from src.input_layer import load_competitors, load_prompts, load_terms
 from src.pipeline import run_ad_hoc_query, run_full_pipeline
+
+load_dotenv()
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="aio-analyzer",
-        description="AI & Search Visibility Benchmarking Tool — measure competitive positioning across LLMs and search engines.",
+        description=(
+            "AI & Search Visibility Benchmarking Tool — "
+            "measure competitive positioning across LLMs and search engines."
+        ),
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -91,7 +94,7 @@ async def cmd_run(args: argparse.Namespace) -> None:
 async def cmd_query(args: argparse.Namespace) -> None:
     """Handle the 'query' command."""
     competitors = load_competitors(args.competitors)
-    print(f"[aio-analyzer] Ad-hoc query: \"{args.query_text}\"")
+    print(f'[aio-analyzer] Ad-hoc query: "{args.query_text}"')
     print(f"[aio-analyzer] Target: {competitors.target}")
 
     await run_ad_hoc_query(
