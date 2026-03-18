@@ -106,7 +106,9 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
             )
             await client.update_run_record(running_record)
         else:
-            # Build a minimal record to mark as running
+            # No pre-existing record (workflow was dispatched directly, not via
+            # StartRun). Create the record from scratch so subsequent
+            # update_run_record calls have a file to GET-then-PUT against.
             from benchmark_control_arcade.run_models import RunRecord
 
             spec_for_record = RunSpec.model_validate_json(run_spec_json)
@@ -121,7 +123,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                 data_branch=settings.github_data_branch,
                 spec=spec_for_record,
             )
-            await client.update_run_record(running_record)
+            await client.create_initial_run_record(running_record)
     except Exception:
         logger.error("Failed to update run record to 'running' for %s", run_id, exc_info=True)
         # Do not return here — continue and try to run anyway, then fail.
