@@ -4,11 +4,12 @@ build-backend = "hatchling.build"
 
 [project]
 name = "geo-audit-arcade"
-version = "0.2.0"
+version = "0.3.0"
 description = "Arcade MCP server for deterministic GEO evidence collection and claim validation"
 requires-python = ">=3.10"
 dependencies = [
     "arcade-mcp-server>=1.11.1,<2.0.0",
+    "anthropic>=0.40.0,<1.0.0",
     "httpx>=0.27.2,<1.0.0",
     "beautifulsoup4",
     "lxml",
