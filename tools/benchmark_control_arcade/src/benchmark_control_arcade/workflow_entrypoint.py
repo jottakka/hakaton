@@ -17,7 +17,9 @@ while leaving run.json in "running" state.
 """
 
 import asyncio
+import base64
 import logging
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -26,9 +28,29 @@ import tempfile
 from benchmark_control_arcade import aioa_runner, geo_runner
 from benchmark_control_arcade.config import Settings
 from benchmark_control_arcade.github_client import GitHubClient
+from benchmark_control_arcade.history_layout import build_run_layout
 from benchmark_control_arcade.run_models import RunArtifact, RunSpec, RunStatus, RunType
 
 logger = logging.getLogger(__name__)
+
+_RUN_ID_RE = re.compile(r"^run-(\d{14})-")
+
+
+def _parse_created_at_from_run_id(run_id: str) -> datetime | None:
+    """Parse the creation datetime encoded in a run_id.
+
+    Expected format: ``run-YYYYMMDDHHMMSS-<hex>``
+
+    Returns None when the run_id doesn't match the expected format so callers
+    can fall back to ``datetime.now()``.
+    """
+    m = _RUN_ID_RE.match(run_id)
+    if not m:
+        return None
+    try:
+        return datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
 
 
 async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
@@ -50,12 +72,12 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
     # ------------------------------------------------------------------
     # Fetch the existing RunRecord so we have created_at for layout paths.
     # ------------------------------------------------------------------
-    # We need to infer created_at. Since the run_id encodes a timestamp in
-    # many formats, we fall back to "now" when we can't fetch it yet — but
-    # ideally the record already exists. We fetch it to get created_at right.
-    # Use a fallback created_at = now so that if the fetch fails we can still
-    # write a failed record.
-    fallback_now = datetime.now(tz=timezone.utc)
+    # The run_id encodes the creation timestamp (run-YYYYMMDDHHMMSS-<hex>),
+    # so parse it directly rather than using datetime.now().  This prevents
+    # a date mismatch when the workflow starts just after UTC midnight — the
+    # data-branch path was written under the *queued* date, not the current
+    # date, so we must look in the same directory.
+    fallback_now = _parse_created_at_from_run_id(run_id) or datetime.now(tz=timezone.utc)
 
     try:
         record = await client.get_run_record(run_id, fallback_now)
@@ -121,12 +143,33 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                 raise ValueError(f"Unknown run_type: {run_type!r}")
 
             # ------------------------------------------------------------------
-            # Transition to "completed"
+            # Upload artifacts to the data branch, then transition to "completed"
             # ------------------------------------------------------------------
-            artifacts: list[RunArtifact] = [
-                RunArtifact(name=Path(p).name, path=p)
-                for p in result.get("artifacts", [])
-            ]
+            layout = build_run_layout(run_id, created_at)
+            artifacts: list[RunArtifact] = []
+            for artifact_rel_path in result.get("artifacts", []):
+                local_path = output_dir / artifact_rel_path
+                if not local_path.is_file():
+                    logger.warning("Artifact not found on disk, skipping: %s", local_path)
+                    continue
+                artifact_name = local_path.name
+                github_path = str(layout.artifacts_dir / artifact_name)
+                content_b64 = base64.b64encode(local_path.read_bytes()).decode()
+                try:
+                    await client._put_file(
+                        github_path,
+                        content_b64,
+                        f"chore: upload artifact {artifact_name} for run {run_id}",
+                    )
+                    artifacts.append(RunArtifact(name=artifact_name, path=github_path))
+                except Exception:
+                    logger.warning(
+                        "Failed to upload artifact %s for run %s",
+                        artifact_name,
+                        run_id,
+                        exc_info=True,
+                    )
+
             summary = result.get("summary") or {k: v for k, v in result.items() if k != "run_id"}
 
             if running_record is not None:
