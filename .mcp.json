@@ -1,17 +1,32 @@
 {
   "mcpServers": {
     "geo-audit": {
-      "type": "http",
-      "url": "${GEO_AUDIT_MCP_URL}"
-    },
-    "geo-analyzer": {
-      "type": "http",
-      "url": "${GEO_ANALYZER_MCP_URL}"
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "tools/geo_audit_arcade",
+        "python",
+        "src/geo_audit_arcade/server.py",
+        "stdio"
+      ],
+      "env": {}
     },
     "benchmark-control": {
-      "type": "stdio",
       "command": "uv",
-      "args": ["run", "--project", "tools/benchmark_control_arcade", "benchmark-control-arcade"]
+      "args": [
+        "run",
+        "--directory",
+        "tools/benchmark_control_arcade",
+        "python",
+        "src/benchmark_control_arcade/server.py",
+        "stdio"
+      ],
+      "env": {
+        "GITHUB_TOKEN": "",
+        "GITHUB_OWNER": "",
+        "GITHUB_REPO": ""
+      }
     }
   }
 }
