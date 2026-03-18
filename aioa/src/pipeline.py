@@ -10,8 +10,7 @@ The `store` parameter accepts any StoreProtocol-compatible backend:
 
 from __future__ import annotations
 
-import asyncio
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -114,13 +113,19 @@ async def run_ad_hoc_query(
     """
     prompt_set = PromptSet(
         prompt_set_id="adhoc",
-        created_at=datetime.now(timezone.utc).isoformat(),
-        prompts=[Prompt(id="adhoc_p1", text=query, category="adhoc", expected_winner=competitors.target)],
+        created_at=datetime.now(UTC).isoformat(),
+        prompts=[
+            Prompt(id="adhoc_p1", text=query, category="adhoc", expected_winner=competitors.target)
+        ],
     )
     term_set = TermSet(
         term_set_id="adhoc",
-        created_at=datetime.now(timezone.utc).isoformat(),
-        terms=[SearchTerm(id="adhoc_s1", query=query, category="adhoc", expected_winner=competitors.target)],
+        created_at=datetime.now(UTC).isoformat(),
+        terms=[
+            SearchTerm(
+                id="adhoc_s1", query=query, category="adhoc", expected_winner=competitors.target
+            )
+        ],
     )
     return await run_full_pipeline(prompt_set, term_set, competitors, output_dir, store=store)
 
@@ -128,6 +133,7 @@ async def run_ad_hoc_query(
 # ---------------------------------------------------------------------------
 # Private helpers
 # ---------------------------------------------------------------------------
+
 
 async def _run_and_store_models(
     store: StoreProtocol, run_id: str, prompt: Prompt
@@ -146,7 +152,11 @@ async def _run_and_store_models(
 
 
 async def _run_and_store_searches(
-    store: StoreProtocol, run_id: str, term: SearchTerm, *, session: Any = None,
+    store: StoreProtocol,
+    run_id: str,
+    term: SearchTerm,
+    *,
+    session: Any = None,
 ) -> list[dict[str, Any]]:
     results = await run_all_searches(term.id, term.query, session=session)
     for r in results:

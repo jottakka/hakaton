@@ -103,9 +103,7 @@ def _extract_types(data: object) -> list[str]:
     return types
 
 
-def compare_title_h1(
-    title: str | None, h1: str | None
-) -> tuple[bool | None, float | None]:
+def compare_title_h1(title: str | None, h1: str | None) -> tuple[bool | None, float | None]:
     """Return (exact_match, similarity_ratio) for title vs H1."""
     if title is None or h1 is None:
         return None, None

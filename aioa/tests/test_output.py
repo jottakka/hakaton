@@ -146,4 +146,3 @@ def test_print_summary_parse_error_path(capsys):
     out = capsys.readouterr().out
     assert "WARNING: Orchestrator response was not valid JSON" in out
     assert "raw text from orchestrator" in out
-

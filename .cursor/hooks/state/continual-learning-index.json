@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "transcripts": {
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/05663175-407b-4ec8-97d3-14029918b053/05663175-407b-4ec8-97d3-14029918b053.jsonl": {
+      "mtimeMs": 1773788207946,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/0ff48a2d-7cf5-43a4-b211-1229ec410dc2.jsonl": {
+      "mtimeMs": 1773858575216,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/subagents/1de54bf4-329d-4498-97e0-2564a8e58d65.jsonl": {
+      "mtimeMs": 1773855997812,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/subagents/6f9ec2cc-9982-4fe2-a5d3-c145ce6bd400.jsonl": {
+      "mtimeMs": 1773855995916,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/subagents/898fc9b7-2c49-4a97-b4ec-f615831d1361.jsonl": {
+      "mtimeMs": 1773858122749,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/subagents/d0d869d7-ec68-44b8-93c1-e2e0f1ae8af3.jsonl": {
+      "mtimeMs": 1773854243238,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/subagents/d15b5cf9-40d6-4058-adf2-ee88d9eae1bf.jsonl": {
+      "mtimeMs": 1773857494772,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/subagents/db774fd9-f571-48bf-a743-8dad708abeaa.jsonl": {
+      "mtimeMs": 1773858125298,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/0ff48a2d-7cf5-43a4-b211-1229ec410dc2/subagents/dd347beb-8add-46b9-aee6-e1efd8920b0c.jsonl": {
+      "mtimeMs": 1773858127385,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/3c2eba39-066c-400e-aea1-ae4f6c43e507/3c2eba39-066c-400e-aea1-ae4f6c43e507.jsonl": {
+      "mtimeMs": 1773853696391,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/3c2eba39-066c-400e-aea1-ae4f6c43e507/subagents/6abd8929-6c2c-41ed-9a7a-42d9bbe64ec5.jsonl": {
+      "mtimeMs": 1773852902984,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/486d89a1-12f0-4039-9474-b33a858374c6.jsonl": {
+      "mtimeMs": 1773786804852,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/146a5b48-c11f-4164-973a-2ceea168e750.jsonl": {
+      "mtimeMs": 1773783655665,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/159a6ba7-e692-4908-9ae5-126ecce78554.jsonl": {
+      "mtimeMs": 1773775414815,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/188a3515-2e13-48d0-b393-4a05fa11149e.jsonl": {
+      "mtimeMs": 1773771002175,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/1ad71b94-77c2-46e4-aed9-ef8d593f8789.jsonl": {
+      "mtimeMs": 1773775541931,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/2152caf0-1494-4ebe-a6b0-3c0219c2a609.jsonl": {
+      "mtimeMs": 1773774703424,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/3418b806-2cc5-4668-851f-8e3e7758c849.jsonl": {
+      "mtimeMs": 1773775384182,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/4f7514c1-62e1-4e27-8158-bc4366179cfb.jsonl": {
+      "mtimeMs": 1773774390582,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/531f2996-1fa1-4b2b-979b-bac8b25ddfdf.jsonl": {
+      "mtimeMs": 1773774744662,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/63330784-d388-40a6-a1f0-00ff2fdb9f07.jsonl": {
+      "mtimeMs": 1773775081819,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/6aaa6fe6-2b33-408f-9c00-89e836be580c.jsonl": {
+      "mtimeMs": 1773785690749,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/750a6528-fc73-48fd-bdd6-aa04a569a0ff.jsonl": {
+      "mtimeMs": 1773774414558,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/9190413e-a6af-4b8c-9e3b-823aaf33d362.jsonl": {
+      "mtimeMs": 1773770949400,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/486d89a1-12f0-4039-9474-b33a858374c6/subagents/f3f5c854-5eed-481c-84b0-d0912b5a5667.jsonl": {
+      "mtimeMs": 1773780557047,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/4a31a3ff-b88e-4df7-8b96-adf00f5d0750/4a31a3ff-b88e-4df7-8b96-adf00f5d0750.jsonl": {
+      "mtimeMs": 1773786569301,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/4a31a3ff-b88e-4df7-8b96-adf00f5d0750/subagents/c6b4754e-10bd-49ba-9beb-d43eff85bfa7.jsonl": {
+      "mtimeMs": 1773785812249,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/550407f8-b73c-4ff7-9b3c-151034d9d90b/550407f8-b73c-4ff7-9b3c-151034d9d90b.jsonl": {
+      "mtimeMs": 1773777958592,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/597a1d0f-fd20-4240-a201-f2cdf9d6abe4/597a1d0f-fd20-4240-a201-f2cdf9d6abe4.jsonl": {
+      "mtimeMs": 1773790306313,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/932a14c4-f0f3-45b5-a61b-0c9148f8583e/932a14c4-f0f3-45b5-a61b-0c9148f8583e.jsonl": {
+      "mtimeMs": 1773855139583,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/932a14c4-f0f3-45b5-a61b-0c9148f8583e/subagents/cbc556ac-9fd4-4b3c-97dc-b8eb64b1115e.jsonl": {
+      "mtimeMs": 1773853665153,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/b50af925-78bc-4125-a230-ccc2eaada8ec/b50af925-78bc-4125-a230-ccc2eaada8ec.jsonl": {
+      "mtimeMs": 1773855024883,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/b50af925-78bc-4125-a230-ccc2eaada8ec/subagents/5acf0494-f488-4ac1-9de4-1e8ae1108c18.jsonl": {
+      "mtimeMs": 1773854232915,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/b8d2d11d-8e01-4ee1-bd41-6d78e0e78585/b8d2d11d-8e01-4ee1-bd41-6d78e0e78585.jsonl": {
+      "mtimeMs": 1773789662752,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/c0fdc206-be91-439d-88a4-8448c93170c7/c0fdc206-be91-439d-88a4-8448c93170c7.jsonl": {
+      "mtimeMs": 1773855956956,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/c0fdc206-be91-439d-88a4-8448c93170c7/subagents/55e117be-2f3d-4a13-9327-2e0b30baa5a5.jsonl": {
+      "mtimeMs": 1773855956994,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/c121dcb9-66d6-4c8f-9775-12716cfa9e8d/c121dcb9-66d6-4c8f-9775-12716cfa9e8d.jsonl": {
+      "mtimeMs": 1773860631078,
+      "lastProcessedAt": "2026-03-18T21:10:39Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/c121dcb9-66d6-4c8f-9775-12716cfa9e8d/subagents/2b8af448-87d6-417e-8c8d-b73400ee8f00.jsonl": {
+      "mtimeMs": 1773855240396,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/c121dcb9-66d6-4c8f-9775-12716cfa9e8d/subagents/6e199485-2bef-4be9-914f-c35764884c2a.jsonl": {
+      "mtimeMs": 1773856124933,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/c315ba27-3d10-4972-835e-b0e5061bb73b/c315ba27-3d10-4972-835e-b0e5061bb73b.jsonl": {
+      "mtimeMs": 1773786741046,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/df79ce3b-40d8-46e4-977f-51dcd052ebfe/df79ce3b-40d8-46e4-977f-51dcd052ebfe.jsonl": {
+      "mtimeMs": 1773791143186,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/f1861424-99e6-4ac1-993f-9142f1ae9d13/f1861424-99e6-4ac1-993f-9142f1ae9d13.jsonl": {
+      "mtimeMs": 1773790580631,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/f1861424-99e6-4ac1-993f-9142f1ae9d13/subagents/1ff8e73f-5c5f-401c-94b8-6e6373757479.jsonl": {
+      "mtimeMs": 1773790299457,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/f1861424-99e6-4ac1-993f-9142f1ae9d13/subagents/220ee524-1e93-463d-b601-b61aff66b8c3.jsonl": {
+      "mtimeMs": 1773790442371,
+      "lastProcessedAt": "2026-03-18T19:00:57Z"
+    },
+    "/Users/franciscojuniodelimaliberal/.cursor/projects/Users-franciscojuniodelimaliberal-Documents-hackaton-hakaton/agent-transcripts/51a0915f-b23a-4447-aaa4-7ff1cbc6d288/51a0915f-b23a-4447-aaa4-7ff1cbc6d288.jsonl": {
+      "mtimeMs": 1773868141104,
+      "lastProcessedAt": "2026-03-18T21:10:39Z"
+    }
+  }
+}

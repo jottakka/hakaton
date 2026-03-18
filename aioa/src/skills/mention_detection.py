@@ -59,14 +59,38 @@ def _estimate_sentiment(snippet: str, company: str) -> str:
     """
     lower = snippet.lower()
     positive_signals = [
-        "best", "leading", "powerful", "excellent", "recommended",
-        "top", "innovative", "robust", "reliable", "popular",
-        "strong", "great", "superior", "advanced", "comprehensive",
+        "best",
+        "leading",
+        "powerful",
+        "excellent",
+        "recommended",
+        "top",
+        "innovative",
+        "robust",
+        "reliable",
+        "popular",
+        "strong",
+        "great",
+        "superior",
+        "advanced",
+        "comprehensive",
     ]
     negative_signals = [
-        "limited", "lacks", "slow", "expensive", "complex",
-        "difficult", "poor", "weakness", "drawback", "issue",
-        "problem", "concern", "downside", "behind", "inferior",
+        "limited",
+        "lacks",
+        "slow",
+        "expensive",
+        "complex",
+        "difficult",
+        "poor",
+        "weakness",
+        "drawback",
+        "issue",
+        "problem",
+        "concern",
+        "downside",
+        "behind",
+        "inferior",
     ]
     pos_count = sum(1 for w in positive_signals if w in lower)
     neg_count = sum(1 for w in negative_signals if w in lower)

@@ -21,7 +21,13 @@ from pathlib import Path
 
 def run_directory(run_id: str, created_at: datetime) -> Path:
     """Return the per-run directory path (relative to data-branch root)."""
-    return Path("runs") / f"{created_at.year:04d}" / f"{created_at.month:02d}" / f"{created_at.day:02d}" / run_id
+    return (
+        Path("runs")
+        / f"{created_at.year:04d}"
+        / f"{created_at.month:02d}"
+        / f"{created_at.day:02d}"
+        / run_id
+    )
 
 
 @dataclass(frozen=True)

@@ -1,0 +1,10 @@
+{
+  "run_type": "geo_compare",
+  "target": "arcade.dev",
+  "options": {
+    "competitors": ["composio.dev", "merge.dev", "workato.com"],
+    "audit_mode": "standard",
+    "coverage_preset": "standard",
+    "discover_subdomains": false
+  }
+}

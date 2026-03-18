@@ -59,8 +59,12 @@ def _build_user_prompt(spec: RunSpec) -> str:
     if spec.options:
         competitors = spec.options.get("competitors")
         if competitors:
-            competitor_list = ", ".join(competitors) if isinstance(competitors, list) else competitors
-            extra_instructions += f"\nAlso audit these competitor URLs for comparison: {competitor_list}"
+            competitor_list = (
+                ", ".join(competitors) if isinstance(competitors, list) else competitors
+            )
+            extra_instructions += (
+                f"\nAlso audit these competitor URLs for comparison: {competitor_list}"
+            )
 
     return (
         f"Perform a GEO site audit for: {target}\n"
@@ -186,9 +190,7 @@ async def run_geo_benchmark(spec: RunSpec, run_id: str, output_dir: Path) -> dic
                         result_text = getattr(block, "text", "")
 
     if not result_text:
-        raise RuntimeError(
-            f"GEO benchmark run {run_id} produced no result text from the agent."
-        )
+        raise RuntimeError(f"GEO benchmark run {run_id} produced no result text from the agent.")
 
     result = _extract_json_from_result(result_text)
     return result

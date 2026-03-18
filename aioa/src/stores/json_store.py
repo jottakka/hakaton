@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 from src.store import StoreProtocol, new_id, now_iso  # noqa: F401 — re-export for convenience
 
@@ -135,7 +135,7 @@ class JsonFileStore:
         self._write(self._run_dir(run_id) / "analysis.json", data)
         return result_id
 
-    async def get_run(self, run_id: str) -> Optional[dict[str, Any]]:
+    async def get_run(self, run_id: str) -> dict[str, Any] | None:
         return self._read(self._run_dir(run_id) / "run.json")
 
     async def get_model_results_for_run(self, run_id: str) -> list[dict[str, Any]]:
@@ -143,8 +143,7 @@ class JsonFileStore:
         if not results_dir.exists():
             return []
         results = [
-            json.loads(f.read_text(encoding="utf-8"))
-            for f in sorted(results_dir.glob("*.json"))
+            json.loads(f.read_text(encoding="utf-8")) for f in sorted(results_dir.glob("*.json"))
         ]
         return results
 
@@ -153,7 +152,6 @@ class JsonFileStore:
         if not results_dir.exists():
             return []
         results = [
-            json.loads(f.read_text(encoding="utf-8"))
-            for f in sorted(results_dir.glob("*.json"))
+            json.loads(f.read_text(encoding="utf-8")) for f in sorted(results_dir.glob("*.json"))
         ]
         return results

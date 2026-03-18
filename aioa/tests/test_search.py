@@ -22,12 +22,19 @@ def _fake_tool_result(content_text: str, is_error: bool = False):
 
 @pytest.mark.asyncio
 async def test_run_mcp_search_parses_organic_results():
-    serpapi_payload = json.dumps({
-        "organic_results": [
-            {"position": 1, "title": "Arcade", "link": "https://arcade.dev", "snippet": "one"},
-            {"position": 2, "title": "Composio", "link": "https://composio.dev", "snippet": "two"},
-        ]
-    })
+    serpapi_payload = json.dumps(
+        {
+            "organic_results": [
+                {"position": 1, "title": "Arcade", "link": "https://arcade.dev", "snippet": "one"},
+                {
+                    "position": 2,
+                    "title": "Composio",
+                    "link": "https://composio.dev",
+                    "snippet": "two",
+                },
+            ]
+        }
+    )
     fake_result = _fake_tool_result(serpapi_payload)
 
     fake_session = AsyncMock()
@@ -61,9 +68,11 @@ async def test_run_mcp_search_parses_organic_results():
 
 @pytest.mark.asyncio
 async def test_run_mcp_search_handles_flat_list():
-    payload = json.dumps([
-        {"position": 1, "title": "A", "url": "https://a.dev", "description": "desc a"},
-    ])
+    payload = json.dumps(
+        [
+            {"position": 1, "title": "A", "url": "https://a.dev", "description": "desc a"},
+        ]
+    )
     fake_result = _fake_tool_result(payload)
 
     fake_session = AsyncMock()
@@ -141,6 +150,7 @@ async def test_run_all_searches_fans_out(monkeypatch):
 @pytest.mark.asyncio
 async def test_run_all_searches_returns_failed_engine_records(monkeypatch):
     """Failed engines must produce a record with status='failed', not be silently dropped."""
+
     async def engine_ok(query: str):
         return [{"position": 1, "title": query, "url": "ok", "snippet": ""}]
 
@@ -158,6 +168,7 @@ async def test_run_all_searches_returns_failed_engine_records(monkeypatch):
 @pytest.mark.asyncio
 async def test_run_all_searches_keeps_error_text_for_failed_engine(monkeypatch):
     """Failed engine records must carry the error message and an empty results list."""
+
     async def engine_ok(query: str):
         return [{"position": 1, "title": query, "url": "ok", "snippet": ""}]
 

@@ -49,8 +49,18 @@ def test_detect_mentions_case_sensitive_proper_noun():
 
 def test_extract_rankings_matches_by_url_and_title():
     results = [
-        {"position": 1, "title": "Composio docs", "url": "https://composio.dev/docs", "snippet": "..."},
-        {"position": 2, "title": "Best MCP gateway Arcade", "url": "https://example.com/blog", "snippet": "..."},
+        {
+            "position": 1,
+            "title": "Composio docs",
+            "url": "https://composio.dev/docs",
+            "snippet": "...",
+        },
+        {
+            "position": 2,
+            "title": "Best MCP gateway Arcade",
+            "url": "https://example.com/blog",
+            "snippet": "...",
+        },
     ]
     rankings = extract_rankings(results, "Arcade", ["Composio", "Kong"])
     assert rankings["Composio"]["position"] == 1
@@ -60,7 +70,9 @@ def test_extract_rankings_matches_by_url_and_title():
 
 def test_calculate_aio_score_and_seo_score():
     assert calculate_aio_score({"mentioned": False}) == 0
-    assert calculate_aio_score({"mentioned": True, "position": "first", "sentiment": "positive"}) == 90
+    assert (
+        calculate_aio_score({"mentioned": True, "position": "first", "sentiment": "positive"}) == 90
+    )
     assert calculate_seo_score({"position": None}) == 0
     assert calculate_seo_score({"position": 1}) == 100
     # Steep curve: pos 3 = 60 (from config [100, 80, 60, 40, 30, 20, 15, 10, 5, 2])
@@ -138,4 +150,3 @@ def test_build_comparison_matrix_returns_rankings():
     assert matrix["seo_avg_scores"]["Composio"] == 90
     assert matrix["head_to_head"]["Arcade_vs_Composio"]["seo"]["winner"] == "Composio"
     assert matrix["rankings"]["aio"][0] == "Arcade"
-

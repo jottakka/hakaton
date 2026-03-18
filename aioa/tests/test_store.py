@@ -9,10 +9,10 @@ import pytest
 from src.stores.json_store import JsonFileStore
 from src.stores.sqlite_store import SqliteStore
 
-
 # ---------------------------------------------------------------------------
 # Shared test suite — runs against both backends
 # ---------------------------------------------------------------------------
+
 
 async def _run_store_tests(store) -> None:
     """Exercise all store methods. Called by both backend test functions."""
@@ -83,7 +83,9 @@ async def _run_store_tests(store) -> None:
     )
     search_results2 = await store.get_search_results_for_run(run_id)
     assert len(search_results2) == 2
-    failed = [r for r in search_results2 if r.get("status") == "failed" or r.get("term_id") == "s002"]
+    failed = [
+        r for r in search_results2 if r.get("status") == "failed" or r.get("term_id") == "s002"
+    ]
     assert len(failed) == 1
     assert failed[0]["status"] == "failed"
     assert failed[0]["error"] == "boom"
@@ -99,6 +101,7 @@ async def _run_store_tests(store) -> None:
 # ---------------------------------------------------------------------------
 # JsonFileStore tests
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_json_store(tmp_path: Path):
@@ -137,6 +140,7 @@ async def test_json_store_model_results_are_separate_files(tmp_path: Path):
 # SqliteStore tests
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_sqlite_store(tmp_path: Path):
     store = SqliteStore(db_path=tmp_path / "test.db")
@@ -154,6 +158,7 @@ async def test_sqlite_store_creates_db_file(tmp_path: Path):
 # ---------------------------------------------------------------------------
 # External run_id tests — both backends
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_json_store_accepts_external_run_id(tmp_path: Path):
@@ -179,6 +184,7 @@ async def test_json_store_accepts_external_run_id(tmp_path: Path):
 async def test_json_store_auto_generates_id_when_none(tmp_path: Path):
     """When run_id is omitted, json_store must still auto-generate a UUID."""
     import uuid
+
     store = JsonFileStore(workspace=tmp_path)
     await store.init()
     returned_id = await store.create_run(
@@ -214,6 +220,7 @@ async def test_sqlite_store_accepts_external_run_id(tmp_path: Path):
 async def test_sqlite_store_auto_generates_id_when_none(tmp_path: Path):
     """When run_id is omitted, sqlite_store must still auto-generate a UUID."""
     import uuid
+
     store = SqliteStore(db_path=tmp_path / "test.db")
     await store.init()
     returned_id = await store.create_run(

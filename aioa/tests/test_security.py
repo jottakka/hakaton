@@ -2,17 +2,16 @@
 
 from __future__ import annotations
 
-import os
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from src.search import _build_mcp_http_client, mcp_session
-
+from src.search import mcp_session
 
 # ---------------------------------------------------------------------------
 # ARCADE_API_KEY required before search
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_arcade_api_key_required_before_search(monkeypatch):
@@ -59,6 +58,7 @@ async def test_arcade_api_key_present_does_not_raise(monkeypatch):
 # ---------------------------------------------------------------------------
 # MCP_SERVER_URL allowlist
 # ---------------------------------------------------------------------------
+
 
 @pytest.mark.asyncio
 async def test_mcp_server_url_rejects_unknown_host(monkeypatch):
@@ -107,6 +107,7 @@ async def test_mcp_server_url_allows_default_arcade_host(monkeypatch):
 # No secret value in error text
 # ---------------------------------------------------------------------------
 
+
 @pytest.mark.asyncio
 async def test_no_secret_value_in_error_text(monkeypatch):
     """If search raises, the exception message must not contain the API key value."""
@@ -117,7 +118,7 @@ async def test_no_secret_value_in_error_text(monkeypatch):
     try:
         async with mcp_session():
             pass
-    except (ValueError, EnvironmentError) as exc:
+    except (OSError, ValueError) as exc:
         assert secret not in str(exc), f"API key leaked in error: {exc}"
     else:
         pytest.fail("Expected an exception but none was raised")

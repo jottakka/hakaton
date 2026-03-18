@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 import aiosqlite
 
@@ -108,7 +108,16 @@ class SqliteStore:
         try:
             await db.execute(
                 "INSERT INTO model_results (id, run_id, prompt_id, prompt_text, model, raw_response, latency_ms, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-                (result_id, run_id, prompt_id, prompt_text, model, raw_response, latency_ms, now_iso()),
+                (
+                    result_id,
+                    run_id,
+                    prompt_id,
+                    prompt_text,
+                    model,
+                    raw_response,
+                    latency_ms,
+                    now_iso(),
+                ),
             )
             await db.commit()
         finally:
@@ -130,7 +139,17 @@ class SqliteStore:
         try:
             await db.execute(
                 "INSERT INTO search_results (id, run_id, term_id, query, engine, results_json, status, error, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (result_id, run_id, term_id, query, engine, json.dumps(results), status, error, now_iso()),
+                (
+                    result_id,
+                    run_id,
+                    term_id,
+                    query,
+                    engine,
+                    json.dumps(results),
+                    status,
+                    error,
+                    now_iso(),
+                ),
             )
             await db.commit()
         finally:
@@ -154,7 +173,7 @@ class SqliteStore:
             await db.close()
         return result_id
 
-    async def get_run(self, run_id: str) -> Optional[dict[str, Any]]:
+    async def get_run(self, run_id: str) -> dict[str, Any] | None:
         db = await self._connect()
         try:
             cursor = await db.execute("SELECT * FROM runs WHERE id = ?", (run_id,))

@@ -24,11 +24,13 @@ logging.getLogger("mcp.client.streamable_http").setLevel(logging.ERROR)
 # Security constants
 # ---------------------------------------------------------------------------
 
-_ALLOWED_MCP_HOSTS: frozenset[str] = frozenset({
-    "api.arcade.dev",
-    "localhost",
-    "127.0.0.1",
-})
+_ALLOWED_MCP_HOSTS: frozenset[str] = frozenset(
+    {
+        "api.arcade.dev",
+        "localhost",
+        "127.0.0.1",
+    }
+)
 
 _MCP_SERVER_URL = os.environ.get("MCP_SERVER_URL", "https://api.arcade.dev/mcp/aio")
 
@@ -77,7 +79,7 @@ async def mcp_session() -> AsyncIterator[ClientSession]:
     """
     api_key = os.environ.get("ARCADE_API_KEY", "")
     if not api_key:
-        raise EnvironmentError(
+        raise OSError(
             "ARCADE_API_KEY is required but not set. "
             "Set the ARCADE_API_KEY environment variable before running searches."
         )

@@ -18,6 +18,4 @@ def assert_no_secrets(text: str, settings: Settings) -> None:
     """
     token = settings.github_token.get_secret_value()
     if token and token in text:
-        raise ValueError(
-            "secret value found in outbound content — refusing to emit"
-        )
+        raise ValueError("secret value found in outbound content — refusing to emit")

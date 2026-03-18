@@ -60,17 +60,19 @@ def find_gaps(
                 target=target,
                 gap_size=gap_size,
             )
-            gaps.append({
-                "id": item["id"],
-                "type": item.get("type", "unknown"),
-                "text": item.get("text", ""),
-                "expected": target,
-                "actual_winner": actual_winner,
-                "arcade_score": target_score,
-                "winner_score": winner_score,
-                "gap_size": gap_size,
-                "recommendation": recommendation,
-            })
+            gaps.append(
+                {
+                    "id": item["id"],
+                    "type": item.get("type", "unknown"),
+                    "text": item.get("text", ""),
+                    "expected": target,
+                    "actual_winner": actual_winner,
+                    "arcade_score": target_score,
+                    "winner_score": winner_score,
+                    "gap_size": gap_size,
+                    "recommendation": recommendation,
+                }
+            )
 
     # Sort by gap size descending (biggest gaps first)
     gaps.sort(key=lambda g: g["gap_size"], reverse=True)
@@ -90,17 +92,17 @@ def _generate_recommendation(
     if item_type == "aio":
         return (
             f"{severity.title()} AIO gap: {actual_winner} outscores {target} by {gap_size} points "
-            f"for \"{text}\". Consider creating more content and documentation around this topic "
+            f'for "{text}". Consider creating more content and documentation around this topic '
             f"to improve AI model awareness of {target}."
         )
     elif item_type == "seo":
         return (
             f"{severity.title()} SEO gap: {actual_winner} outranks {target} by {gap_size} points "
-            f"for \"{text}\". Consider targeted SEO content, backlink building, and landing page "
+            f'for "{text}". Consider targeted SEO content, backlink building, and landing page '
             f"optimization for this query."
         )
     else:
         return (
             f"{severity.title()} gap: {actual_winner} leads {target} by {gap_size} points "
-            f"for \"{text}\"."
+            f'for "{text}".'
         )

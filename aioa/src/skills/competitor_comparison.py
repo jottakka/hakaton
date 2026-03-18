@@ -104,7 +104,7 @@ def _average_scores(
     Returns None for a company when no scores are available.
     """
     if not score_dicts:
-        return {c: None for c in companies}
+        return dict.fromkeys(companies)
 
     totals: dict[str, list[int]] = {c: [] for c in companies}
     for scores in score_dicts:
@@ -115,6 +115,5 @@ def _average_scores(
                 totals[company].append(scores[company])
 
     return {
-        company: round(sum(vals) / len(vals)) if vals else None
-        for company, vals in totals.items()
+        company: round(sum(vals) / len(vals)) if vals else None for company, vals in totals.items()
     }

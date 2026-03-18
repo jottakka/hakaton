@@ -25,7 +25,7 @@ def print_summary(analysis: dict[str, Any]) -> None:
     mode_label = "SEO-only" if run_mode == "seo_only" else "Full"
 
     print("\n" + "=" * 70)
-    print(f"  AIO ANALYZER — Competitive Visibility Report")
+    print("  AIO ANALYZER — Competitive Visibility Report")
     print(f"  Run ID:     {run_id}")
     print(f"  Generated:  {generated_at}")
     print(f"  Run Mode:  {mode_label}")
@@ -86,12 +86,14 @@ def print_summary(analysis: dict[str, Any]) -> None:
     partial_terms = [r for r in seo_results if r.get("status") == "partial"]
     if failed_terms or partial_terms:
         print(f"\n{'─' * 70}")
-        print(f"  ⚠ Incomplete Search Collection")
+        print("  ⚠ Incomplete Search Collection")
         print(f"{'─' * 70}")
         if failed_terms:
             print(f"    {len(failed_terms)} term(s) fully failed (excluded from scoring)")
         if partial_terms:
-            print(f"    {len(partial_terms)} term(s) partially failed (scored with available engines)")
+            print(
+                f"    {len(partial_terms)} term(s) partially failed (scored with available engines)"
+            )
 
     # Gap report
     gaps = analysis.get("gap_report", [])
@@ -101,8 +103,12 @@ def print_summary(analysis: dict[str, Any]) -> None:
         print(f"{'─' * 70}")
         for g in gaps:
             print(f"\n  [{g.get('id', '?')}] {g.get('text', '')}")
-            print(f"    Type: {g.get('type', '?')} | Expected: {g.get('expected', '?')} | Actual Winner: {g.get('actual_winner', '?')}")
-            print(f"    Arcade Score: {g.get('arcade_score', '?')} | Winner Score: {g.get('winner_score', '?')}")
+            print(
+                f"    Type: {g.get('type', '?')} | Expected: {g.get('expected', '?')} | Actual Winner: {g.get('actual_winner', '?')}"
+            )
+            print(
+                f"    Arcade Score: {g.get('arcade_score', '?')} | Winner Score: {g.get('winner_score', '?')}"
+            )
             rec = g.get("recommendation", "")
             if rec:
                 print(f"    Recommendation: {rec}")

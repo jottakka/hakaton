@@ -118,4 +118,3 @@ async def test_run_all_models_skips_failed_models(monkeypatch):
             "latency_ms": 5,
         }
     ]
-

@@ -28,7 +28,13 @@ class FakeStore:
     async def init(self) -> None:
         self.initialized = True
 
-    async def create_run(self, prompt_set_id: str, term_set_id: str, competitor_config: dict, run_id: str | None = None) -> str:
+    async def create_run(
+        self,
+        prompt_set_id: str,
+        term_set_id: str,
+        competitor_config: dict,
+        run_id: str | None = None,
+    ) -> str:
         self.runs.append((prompt_set_id, term_set_id, competitor_config))
         return self.run_id
 
@@ -109,7 +115,14 @@ async def test_run_full_pipeline_wires_layers(monkeypatch, tmp_path: Path):
             {
                 "engine": "google",
                 "term_id": term_id,
-                "results": [{"position": 1, "title": "Arcade", "url": "https://arcade.dev", "snippet": "..."}],
+                "results": [
+                    {
+                        "position": 1,
+                        "title": "Arcade",
+                        "url": "https://arcade.dev",
+                        "snippet": "...",
+                    }
+                ],
                 "status": "ok",
                 "error": None,
             }
@@ -184,8 +197,18 @@ async def test_run_full_pipeline_marks_seo_only_mode(monkeypatch, tmp_path: Path
                 "engine": "google",
                 "term_id": term_id,
                 "results": [
-                    {"position": 1, "title": "Arcade docs", "url": "https://arcade.dev", "snippet": "..."},
-                    {"position": 2, "title": "Composio docs", "url": "https://composio.dev", "snippet": "..."},
+                    {
+                        "position": 1,
+                        "title": "Arcade docs",
+                        "url": "https://arcade.dev",
+                        "snippet": "...",
+                    },
+                    {
+                        "position": 2,
+                        "title": "Composio docs",
+                        "url": "https://composio.dev",
+                        "snippet": "...",
+                    },
                 ],
                 "status": "ok",
                 "error": None,
@@ -193,15 +216,17 @@ async def test_run_full_pipeline_marks_seo_only_mode(monkeypatch, tmp_path: Path
         ]
 
     obs_json = json.dumps({"observations": {"adhoc_s1": "Arcade ranked #1."}})
-    synth_json = json.dumps({
-        "summary": {
-            "arcade_avg_aio_score": None,
-            "arcade_avg_seo_score": 55,
-            "top_competitor": "Composio",
-            "biggest_gap": "adhoc_s1",
-        },
-        "gap_recommendations": {},
-    })
+    synth_json = json.dumps(
+        {
+            "summary": {
+                "arcade_avg_aio_score": None,
+                "arcade_avg_seo_score": 55,
+                "top_competitor": "Composio",
+                "biggest_gap": "adhoc_s1",
+            },
+            "gap_recommendations": {},
+        }
+    )
 
     class _FakeAnthropicClient:
         def __init__(self, **kwargs):
@@ -223,6 +248,7 @@ async def test_run_full_pipeline_marks_seo_only_mode(monkeypatch, tmp_path: Path
         terms=[SearchTerm(id="adhoc_s1", query="best mcp gateway")],
     )
     from src.input_layer import PromptSet
+
     prompt_set = PromptSet(prompt_set_id="p-set", prompts=[])
 
     analysis = await run_full_pipeline(

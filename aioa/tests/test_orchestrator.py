@@ -13,7 +13,6 @@ from src.orchestrator import (
     run_subagent,
 )
 
-
 # ---------------------------------------------------------------------------
 # batch_items
 # ---------------------------------------------------------------------------
@@ -28,7 +27,11 @@ def test_batch_items_splits_prompts_and_terms():
         {"prompt_id": "p003", "model": "a", "raw_response": "resp a3"},
     ]
     search_results = [
-        {"term_id": "s001", "engine": "google", "results": [{"position": 1, "title": "x", "url": "u"}]},
+        {
+            "term_id": "s001",
+            "engine": "google",
+            "results": [{"position": 1, "title": "x", "url": "u"}],
+        },
         {"term_id": "s002", "engine": "google", "results": []},
     ]
 
@@ -94,17 +97,31 @@ class _FakeAnthropicClient:
 @pytest.mark.asyncio
 async def test_run_subagent_scores_and_observes(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
-    obs_json = json.dumps({"observations": {"p001": "Arcade was mentioned first with positive sentiment."}})
+    obs_json = json.dumps(
+        {"observations": {"p001": "Arcade was mentioned first with positive sentiment."}}
+    )
     client = _FakeAnthropicClient(obs_json)
     monkeypatch.setattr("src.orchestrator.anthropic.AsyncAnthropic", lambda api_key: client)
 
     from src.skills.score_calculation import load_scoring_matrix
+
     matrix = load_scoring_matrix()
 
     batch = {
-        "prompts": [{"id": "p001", "text": "Best MCP gateway?", "category": "mcp", "expected_winner": "Arcade"}],
+        "prompts": [
+            {
+                "id": "p001",
+                "text": "Best MCP gateway?",
+                "category": "mcp",
+                "expected_winner": "Arcade",
+            }
+        ],
         "model_results": [
-            {"prompt_id": "p001", "model": "sonnet", "raw_response": "Arcade is the leading MCP gateway. Composio also offers tools."},
+            {
+                "prompt_id": "p001",
+                "model": "sonnet",
+                "raw_response": "Arcade is the leading MCP gateway. Composio also offers tools.",
+            },
         ],
         "terms": [],
         "search_results": [],
@@ -197,15 +214,19 @@ async def test_run_orchestrator_end_to_end(monkeypatch):
             if "observation" in system.lower():
                 return _FakeResponse(json.dumps({"observations": {"p001": "obs"}}))
             else:
-                return _FakeResponse(json.dumps({
-                    "summary": {
-                        "arcade_avg_aio_score": 70,
-                        "arcade_avg_seo_score": 60,
-                        "top_competitor": "Composio",
-                        "biggest_gap": "Arcade not mentioned enough",
-                    },
-                    "gap_recommendations": {},
-                }))
+                return _FakeResponse(
+                    json.dumps(
+                        {
+                            "summary": {
+                                "arcade_avg_aio_score": 70,
+                                "arcade_avg_seo_score": 60,
+                                "top_competitor": "Composio",
+                                "biggest_gap": "Arcade not mentioned enough",
+                            },
+                            "gap_recommendations": {},
+                        }
+                    )
+                )
 
     monkeypatch.setattr("src.orchestrator.anthropic.AsyncAnthropic", _MultiClient)
 
@@ -216,7 +237,9 @@ async def test_run_orchestrator_end_to_end(monkeypatch):
         ],
         search_results=[],
         competitor_config={"target": "Arcade", "competitors": ["Composio"]},
-        prompts=[{"id": "p001", "text": "Best MCP?", "category": "mcp", "expected_winner": "Arcade"}],
+        prompts=[
+            {"id": "p001", "text": "Best MCP?", "category": "mcp", "expected_winner": "Arcade"}
+        ],
         terms=[],
     )
 
@@ -235,15 +258,17 @@ async def test_run_orchestrator_sets_null_aio_score_when_no_model_results(monkey
     and arcade_avg_aio_score must be None."""
     monkeypatch.setenv("ANTHROPIC_API_KEY", "test-key")
 
-    synth_json = json.dumps({
-        "summary": {
-            "arcade_avg_aio_score": None,
-            "arcade_avg_seo_score": 55,
-            "top_competitor": "Composio",
-            "biggest_gap": "s001",
-        },
-        "gap_recommendations": {},
-    })
+    synth_json = json.dumps(
+        {
+            "summary": {
+                "arcade_avg_aio_score": None,
+                "arcade_avg_seo_score": 55,
+                "top_competitor": "Composio",
+                "biggest_gap": "s001",
+            },
+            "gap_recommendations": {},
+        }
+    )
 
     class _SEOOnlyClient:
         def __init__(self, **kwargs):
@@ -265,14 +290,26 @@ async def test_run_orchestrator_sets_null_aio_score_when_no_model_results(monkey
                 "engine": "google",
                 "term_id": "s001",
                 "results": [
-                    {"position": 1, "title": "Arcade docs", "url": "https://arcade.dev", "snippet": "..."},
-                    {"position": 3, "title": "Composio docs", "url": "https://composio.dev", "snippet": "..."},
+                    {
+                        "position": 1,
+                        "title": "Arcade docs",
+                        "url": "https://arcade.dev",
+                        "snippet": "...",
+                    },
+                    {
+                        "position": 3,
+                        "title": "Composio docs",
+                        "url": "https://composio.dev",
+                        "snippet": "...",
+                    },
                 ],
             }
         ],
         competitor_config={"target": "Arcade", "competitors": ["Composio"]},
         prompts=[],
-        terms=[{"id": "s001", "query": "mcp gateway", "category": "mcp", "expected_winner": "Arcade"}],
+        terms=[
+            {"id": "s001", "query": "mcp gateway", "category": "mcp", "expected_winner": "Arcade"}
+        ],
     )
 
     assert analysis["run_mode"] == "seo_only"
@@ -312,19 +349,32 @@ async def test_run_subagent_marks_partial_when_some_engines_fail(monkeypatch):
     monkeypatch.setattr("src.orchestrator.anthropic.AsyncAnthropic", lambda api_key: client)
 
     from src.skills.score_calculation import load_scoring_matrix
+
     matrix = load_scoring_matrix()
 
     batch = {
         "prompts": [],
         "model_results": [],
-        "terms": [{"id": "s001", "query": "mcp gateway", "category": "mcp", "expected_winner": "Arcade"}],
+        "terms": [
+            {"id": "s001", "query": "mcp gateway", "category": "mcp", "expected_winner": "Arcade"}
+        ],
         "search_results": [
             {
                 "engine": "google",
                 "term_id": "s001",
                 "results": [
-                    {"position": 1, "title": "Arcade docs", "url": "https://arcade.dev", "snippet": "..."},
-                    {"position": 3, "title": "Composio docs", "url": "https://composio.dev", "snippet": "..."},
+                    {
+                        "position": 1,
+                        "title": "Arcade docs",
+                        "url": "https://arcade.dev",
+                        "snippet": "...",
+                    },
+                    {
+                        "position": 3,
+                        "title": "Composio docs",
+                        "url": "https://composio.dev",
+                        "snippet": "...",
+                    },
                 ],
                 "status": "ok",
                 "error": None,
@@ -379,7 +429,12 @@ async def test_run_orchestrator_fallback_when_synthesis_fails(monkeypatch):
                 "engine": "google",
                 "term_id": "s001",
                 "results": [
-                    {"position": 1, "title": "Arcade docs", "url": "https://arcade.dev", "snippet": "..."},
+                    {
+                        "position": 1,
+                        "title": "Arcade docs",
+                        "url": "https://arcade.dev",
+                        "snippet": "...",
+                    },
                 ],
                 "status": "ok",
                 "error": None,
@@ -387,7 +442,9 @@ async def test_run_orchestrator_fallback_when_synthesis_fails(monkeypatch):
         ],
         competitor_config={"target": "Arcade", "competitors": ["Composio"]},
         prompts=[],
-        terms=[{"id": "s001", "query": "mcp gateway", "category": "mcp", "expected_winner": "Arcade"}],
+        terms=[
+            {"id": "s001", "query": "mcp gateway", "category": "mcp", "expected_winner": "Arcade"}
+        ],
     )
 
     assert analysis["run_id"] == "test-run"

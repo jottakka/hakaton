@@ -21,11 +21,11 @@ import base64
 import logging
 import re
 import sys
-from datetime import datetime, timezone
-from pathlib import Path
 import tempfile
+from datetime import UTC, datetime
+from pathlib import Path
 
-from benchmark_control_arcade import aioa_runner, geo_runner
+from benchmark_control_arcade import aioa_runner, geo_compare_runner, geo_runner
 from benchmark_control_arcade.config import Settings
 from benchmark_control_arcade.github_client import GitHubClient
 from benchmark_control_arcade.history_layout import build_run_layout
@@ -48,7 +48,7 @@ def _parse_created_at_from_run_id(run_id: str) -> datetime | None:
     if not m:
         return None
     try:
-        return datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=timezone.utc)
+        return datetime.strptime(m.group(1), "%Y%m%d%H%M%S").replace(tzinfo=UTC)
     except ValueError:
         return None
 
@@ -77,7 +77,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
     # a date mismatch when the workflow starts just after UTC midnight — the
     # data-branch path was written under the *queued* date, not the current
     # date, so we must look in the same directory.
-    fallback_now = _parse_created_at_from_run_id(run_id) or datetime.now(tz=timezone.utc)
+    fallback_now = _parse_created_at_from_run_id(run_id) or datetime.now(tz=UTC)
 
     try:
         record = await client.get_run_record(run_id, fallback_now)
@@ -101,7 +101,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
             running_record = record.model_copy(
                 update={
                     "status": RunStatus.running,
-                    "updated_at": datetime.now(tz=timezone.utc),
+                    "updated_at": datetime.now(tz=UTC),
                 }
             )
             await client.update_run_record(running_record)
@@ -117,7 +117,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                 run_type=RunType(run_type),
                 status=RunStatus.running,
                 created_at=created_at,
-                updated_at=datetime.now(tz=timezone.utc),
+                updated_at=datetime.now(tz=UTC),
                 repo=f"{settings.github_owner}/{settings.github_repo}",
                 workflow_name=settings.github_run_workflow,
                 data_branch=settings.github_data_branch,
@@ -141,6 +141,10 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                 result = await aioa_runner.run_aioa_benchmark(spec, run_id, output_dir)
             elif rtype == RunType.geo:
                 result = await geo_runner.run_geo_benchmark(spec, run_id, output_dir)
+            elif rtype == RunType.geo_compare:
+                result = await geo_compare_runner.run_geo_compare_benchmark(
+                    spec, run_id, output_dir
+                )
             else:
                 raise ValueError(f"Unknown run_type: {run_type!r}")
 
@@ -178,7 +182,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                 completed_record = running_record.model_copy(
                     update={
                         "status": RunStatus.completed,
-                        "updated_at": datetime.now(tz=timezone.utc),
+                        "updated_at": datetime.now(tz=UTC),
                         "artifacts": artifacts,
                         "summary": summary,
                         "error": None,
@@ -192,7 +196,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                     run_type=rtype,
                     status=RunStatus.completed,
                     created_at=created_at,
-                    updated_at=datetime.now(tz=timezone.utc),
+                    updated_at=datetime.now(tz=UTC),
                     repo=f"{settings.github_owner}/{settings.github_repo}",
                     workflow_name=settings.github_run_workflow,
                     data_branch=settings.github_data_branch,
@@ -214,7 +218,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                     failed_record = running_record.model_copy(
                         update={
                             "status": RunStatus.failed,
-                            "updated_at": datetime.now(tz=timezone.utc),
+                            "updated_at": datetime.now(tz=UTC),
                             "error": str(exc),
                         }
                     )
@@ -223,14 +227,21 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
 
                     failed_record = RunRecord(
                         run_id=run_id,
-                        run_type=RunType(run_type) if run_type in RunType._value2member_map_ else RunType.aioa,
+                        run_type=RunType(run_type)
+                        if run_type in RunType._value2member_map_
+                        else RunType.aioa,
                         status=RunStatus.failed,
                         created_at=created_at,
-                        updated_at=datetime.now(tz=timezone.utc),
+                        updated_at=datetime.now(tz=UTC),
                         repo=f"{settings.github_owner}/{settings.github_repo}",
                         workflow_name=settings.github_run_workflow,
                         data_branch=settings.github_data_branch,
-                        spec=RunSpec(run_type=RunType(run_type) if run_type in RunType._value2member_map_ else RunType.aioa, target="unknown"),
+                        spec=RunSpec(
+                            run_type=RunType(run_type)
+                            if run_type in RunType._value2member_map_
+                            else RunType.aioa,
+                            target="unknown",
+                        ),
                         error=str(exc),
                     )
                 await client.update_run_record(failed_record)

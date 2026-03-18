@@ -4,17 +4,17 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Optional
 
 from pydantic import BaseModel, Field
-
 
 # ---------------------------------------------------------------------------
 # Pydantic models
 # ---------------------------------------------------------------------------
 
+
 class CompetitorConfig(BaseModel):
     """Target company plus the list of competitors to track."""
+
     target: str
     competitors: list[str]
 
@@ -26,15 +26,17 @@ class CompetitorConfig(BaseModel):
 
 class Prompt(BaseModel):
     """A single model prompt for AIO benchmarking."""
+
     id: str
     text: str
     category: str = ""
     expected_winner: str = "Arcade"
-    notes: Optional[str] = None
+    notes: str | None = None
 
 
 class PromptSet(BaseModel):
     """A versioned set of prompts."""
+
     prompt_set_id: str
     created_at: str = ""
     prompts: list[Prompt] = Field(default_factory=list)
@@ -42,15 +44,17 @@ class PromptSet(BaseModel):
 
 class SearchTerm(BaseModel):
     """A single search term for SEO benchmarking."""
+
     id: str
     query: str
     category: str = ""
     expected_winner: str = "Arcade"
-    notes: Optional[str] = None
+    notes: str | None = None
 
 
 class TermSet(BaseModel):
     """A versioned set of search terms."""
+
     term_set_id: str
     created_at: str = ""
     terms: list[SearchTerm] = Field(default_factory=list)
@@ -59,6 +63,7 @@ class TermSet(BaseModel):
 # ---------------------------------------------------------------------------
 # Loaders
 # ---------------------------------------------------------------------------
+
 
 def load_competitors(path: str | Path = "config/competitors.json") -> CompetitorConfig:
     """Load and validate the competitor config file."""

@@ -10,8 +10,8 @@ Current implementations:
 from __future__ import annotations
 
 import uuid
-from datetime import datetime, timezone
-from typing import Any, Optional, Protocol, runtime_checkable
+from datetime import UTC, datetime
+from typing import Any, Protocol, runtime_checkable
 
 
 def new_id() -> str:
@@ -19,7 +19,7 @@ def new_id() -> str:
 
 
 def now_iso() -> str:
-    return datetime.now(timezone.utc).isoformat()
+    return datetime.now(UTC).isoformat()
 
 
 @runtime_checkable
@@ -77,7 +77,7 @@ class StoreProtocol(Protocol):
         """Persist the orchestrator analysis output and return its id."""
         ...
 
-    async def get_run(self, run_id: str) -> Optional[dict[str, Any]]:
+    async def get_run(self, run_id: str) -> dict[str, Any] | None:
         """Fetch run metadata by id. Returns None if not found."""
         ...
 
