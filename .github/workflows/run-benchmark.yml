@@ -40,6 +40,19 @@ jobs:
       - name: Sync benchmark_control_arcade deps
         run: uv sync --project tools/benchmark_control_arcade --extra runners
 
+      - name: Sync geo_audit_arcade deps
+        run: uv sync --project tools/geo_audit_arcade
+
+      - name: Start geo-audit MCP server (background)
+        run: |
+          uv run --project tools/geo_audit_arcade \
+            python tools/geo_audit_arcade/src/geo_audit_arcade/server.py http \
+            --host 127.0.0.1 --port 8000 &
+          echo "Waiting for geo-audit server to be ready..."
+          for i in $(seq 1 15); do
+            curl -sf http://127.0.0.1:8000/health && echo "Server ready" && break || sleep 2
+          done
+
       - name: Run benchmark
         env:
           GITHUB_TOKEN: ${{ secrets.BENCHMARK_GITHUB_TOKEN }}
@@ -49,7 +62,7 @@ jobs:
           ARCADE_API_KEY: ${{ secrets.ARCADE_API_KEY }}
           ARCADE_USER_ID: ${{ secrets.ARCADE_USER_ID }}
           MCP_SERVER_URL: https://api.arcade.dev/mcp/aio
-          GEO_AUDIT_MCP_URL: ${{ secrets.GEO_AUDIT_MCP_URL }}
+          GEO_AUDIT_MCP_URL: http://127.0.0.1:8000/mcp
         run: |
           uv run --project tools/benchmark_control_arcade python -m benchmark_control_arcade.workflow_entrypoint \
             "${{ inputs.run_id }}" "${{ inputs.run_type }}" '${{ inputs.run_spec_json }}'
