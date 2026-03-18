@@ -4,7 +4,7 @@ All required values come from environment variables (or a .env file at the
 repo root). The server fails fast on startup if required fields are missing.
 """
 
-from pydantic import SecretStr
+from pydantic import SecretStr, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -35,3 +35,10 @@ class Settings(BaseSettings):
     # Defaults that match .env.example
     github_data_branch: str = "benchmark-data"
     github_run_workflow: str = "run-benchmark.yml"
+
+    @field_validator("github_token", mode="before")
+    @classmethod
+    def token_must_not_be_blank(cls, v: object) -> object:
+        if isinstance(v, str) and not v.strip():
+            raise ValueError("blank github_token is not allowed")
+        return v
