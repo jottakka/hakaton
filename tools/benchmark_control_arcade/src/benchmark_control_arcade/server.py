@@ -24,6 +24,7 @@ from datetime import UTC, datetime
 from typing import Annotated, Any
 
 from arcade_mcp_server import MCPApp
+from arcade_tdk import ToolContext
 
 from benchmark_control_arcade.compare import compare_aioa_runs
 from benchmark_control_arcade.config import Settings
@@ -40,6 +41,33 @@ from benchmark_control_arcade.run_models import (
     RunStatus,
     RunType,
 )
+
+
+def _settings_from_context(ctx: ToolContext) -> Settings:
+    """Build Settings, pulling secrets from ToolContext when available.
+
+    Arcade injects declared secrets into ToolContext, not os.environ.
+    Falls back to os.environ / .env for local development.
+    """
+
+    def _get(key: str) -> str | None:
+        try:
+            return ctx.get_secret(key)
+        except (ValueError, AttributeError):
+            return None
+
+    overrides: dict[str, Any] = {}
+    for field, key in [
+        ("github_token", "GITHUB_TOKEN"),
+        ("github_owner", "GITHUB_OWNER"),
+        ("github_repo", "GITHUB_REPO"),
+    ]:
+        val = _get(key)
+        if val:
+            overrides[field] = val
+
+    return Settings(**overrides) if overrides else Settings()  # type: ignore[call-arg]
+
 
 app = MCPApp(
     name="BenchmarkControl",
@@ -136,6 +164,7 @@ async def _compare_aioa_runs(
 
 @app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def StartRun(
+    ctx: ToolContext,
     run_type: Annotated[str, "Run type: 'aioa', 'geo', or 'geo_compare'"],
     target: Annotated[str, "URL or target identifier for the benchmark"],
     options_json: Annotated[str, "JSON object of extra run options (default: {})"] = "{}",
@@ -147,7 +176,7 @@ async def StartRun(
     Failed runs are excluded from the average.  Returns null when no history
     exists yet.
     """
-    settings = Settings()
+    settings = _settings_from_context(ctx)
     client = GitHubClient(settings)
     record = await _start_run(settings, client, run_type, target, options_json)
     avg = await get_average_elapsed_seconds(client, run_type)
@@ -158,50 +187,55 @@ async def StartRun(
 
 @app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def GetRunStatus(
+    ctx: ToolContext,
     run_id: Annotated[str, "The run identifier returned by StartRun"],
     created_at: Annotated[str, "ISO-8601 creation timestamp from the RunRecord"],
 ) -> Annotated[str, "Current RunRecord as JSON"]:
     """Fetch the current state of a benchmark run."""
-    settings = Settings()
+    settings = _settings_from_context(ctx)
     client = GitHubClient(settings)
     return await _get_run_status(client, run_id, created_at)
 
 
 @app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def ListRuns(
+    ctx: ToolContext,
     limit: Annotated[int, "Maximum number of runs to return (default: 20)"] = 20,
 ) -> Annotated[str, "JSON array of RunRecord objects, newest first"]:
     """List recent benchmark runs from the data branch."""
-    settings = Settings()
+    settings = _settings_from_context(ctx)
     client = GitHubClient(settings)
     return await _list_runs(client, limit=limit)
 
 
 @app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def GetRunReport(
+    ctx: ToolContext,
     run_id: Annotated[str, "The run identifier"],
     created_at: Annotated[str, "ISO-8601 creation timestamp from the RunRecord"],
     fmt: Annotated[str, "Report format: 'md' (default) or 'json'"] = "md",
 ) -> Annotated[str, "Report content as a string"]:
     """Retrieve the benchmark report for a completed run."""
-    settings = Settings()
+    settings = _settings_from_context(ctx)
     client = GitHubClient(settings)
     return await _get_run_report(client, run_id, created_at, fmt=fmt)
 
 
 @app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def GetRunArtifacts(
+    ctx: ToolContext,
     run_id: Annotated[str, "The run identifier"],
     created_at: Annotated[str, "ISO-8601 creation timestamp from the RunRecord"],
 ) -> Annotated[str, "JSON array of RunArtifact objects"]:
     """List the artifact paths for a completed benchmark run."""
-    settings = Settings()
+    settings = _settings_from_context(ctx)
     client = GitHubClient(settings)
     return await _get_run_artifacts(client, run_id, created_at)
 
 
 @app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def CompareAioaRuns(
+    ctx: ToolContext,
     run_id_a: Annotated[str, "First AIOA run identifier"],
     created_at_a: Annotated[str, "ISO-8601 creation timestamp of the first run"],
     run_id_b: Annotated[str, "Second AIOA run identifier"],
@@ -212,7 +246,7 @@ async def CompareAioaRuns(
     Both runs must be of type 'aioa'. GEO runs are not supported in v1.
     Returns a structured diff of summaries, statuses, and targets.
     """
-    settings = Settings()
+    settings = _settings_from_context(ctx)
     client = GitHubClient(settings)
     return await _compare_aioa_runs(client, run_id_a, created_at_a, run_id_b, created_at_b)
 
@@ -240,6 +274,7 @@ async def _search_geo_reports(
 
 @app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def SearchGeoReports(
+    ctx: ToolContext,
     target: Annotated[str, "Primary site being audited (e.g. 'arcade.dev'). Empty = all."] = "",
     competitor: Annotated[str, "Filter runs that include this competitor URL. Empty = all."] = "",
     from_date: Annotated[str, "ISO-8601 start date inclusive (YYYY-MM-DD). Empty = no bound."] = "",
@@ -252,7 +287,7 @@ async def SearchGeoReports(
     Returns geo and geo_compare runs matching all supplied filters, newest first.
     Omit a filter (or pass an empty string) to match all values for that field.
     """
-    settings = Settings()
+    settings = _settings_from_context(ctx)
     client = GitHubClient(settings)
     return await _search_geo_reports(
         client, target, competitor, from_date, to_date, run_type, limit
