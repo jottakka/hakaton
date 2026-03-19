@@ -127,7 +127,7 @@ def _validate_url(url: str, param_name: str = "target_url") -> str:
 
 app = MCPApp(
     name="BenchmarkControl",
-    version="0.2.0",
+    version="0.2.1",
     instructions=(
         "Control plane for AIOA and GEO benchmark runs. "
         "Use StartRun, GetRunStatus, ListRuns, GetLatestRun, GetRunReport, "
