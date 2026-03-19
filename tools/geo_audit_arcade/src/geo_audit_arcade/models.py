@@ -3,22 +3,39 @@
 from __future__ import annotations
 
 from enum import Enum
-from typing import Literal
 
 from pydantic import AnyHttpUrl, BaseModel, Field
 
-CoveragePreset = Literal["light", "standard", "deep", "exhaustive"]
-CandidateSource = Literal[
-    "target",
-    "root",
-    "sitemap",
-    "llms",
-    "nav",
-    "footer",
-    "path_cluster",
-    "redirect",
-    "manual",
-]
+
+class AuditMode(str, Enum):
+    """Depth of GEO analysis."""
+
+    QUICK = "quick"
+    STANDARD = "standard"
+    EXHAUSTIVE = "exhaustive"
+
+
+class CoveragePreset(str, Enum):
+    """Page budget for evidence collection."""
+
+    LIGHT = "light"
+    STANDARD = "standard"
+    DEEP = "deep"
+    EXHAUSTIVE = "exhaustive"
+
+
+class CandidateSource(str, Enum):
+    """How a candidate page was discovered."""
+
+    TARGET = "target"
+    ROOT = "root"
+    SITEMAP = "sitemap"
+    LLMS = "llms"
+    NAV = "nav"
+    FOOTER = "footer"
+    PATH_CLUSTER = "path_cluster"
+    REDIRECT = "redirect"
+    MANUAL = "manual"
 
 
 class ArtifactStatus(str, Enum):

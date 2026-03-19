@@ -11,6 +11,7 @@ All HTTP is treated as a boundary: retried with tenacity on transient errors
 
 from __future__ import annotations
 
+import asyncio
 import base64
 import json
 import logging
@@ -238,14 +239,17 @@ class GitHubClient:
         raw = _decode(data["content"])
         return RunRecord.model_validate_json(raw)
 
+    async def get_file_content(self, path: str) -> str:
+        """Fetch and decode a single file's content from the data branch."""
+        data = await self._get_file(path)
+        return _decode(data["content"])
+
     async def list_run_records(self, limit: int = 20) -> list[RunRecord]:
         """Return up to *limit* run records, newest first.
 
         Uses the git-trees API to discover all run.json files, then fetches
         each one concurrently. Records are sorted by *created_at* descending.
         """
-        import asyncio
-
         tree = await self._get_tree()
         run_json_paths = [
             item["path"]

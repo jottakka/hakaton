@@ -4,6 +4,9 @@ import json
 from unittest.mock import AsyncMock, patch
 
 import pytest
+from arcade_mcp_server.exceptions import ToolExecutionError
+
+from geo_audit_arcade.models import AuditMode, CoveragePreset
 
 
 class TestServerImport:
@@ -57,8 +60,8 @@ class TestRunGeoSiteAudit:
 
             await RunGeoSiteAudit(
                 target_url="https://example.com",
-                audit_mode="quick",
-                coverage_preset="light",
+                audit_mode=AuditMode.QUICK,
+                coverage_preset=CoveragePreset.LIGHT,
                 discover_subdomains=False,
             )
 
@@ -68,6 +71,26 @@ class TestRunGeoSiteAudit:
             coverage_preset="light",
             discover_subdomains=False,
         )
+
+    @pytest.mark.asyncio
+    async def test_validates_empty_url(self):
+        from geo_audit_arcade.server import RunGeoSiteAudit
+
+        with pytest.raises(ToolExecutionError, match="must not be empty"):
+            await RunGeoSiteAudit(target_url="")
+
+    @pytest.mark.asyncio
+    async def test_auto_prefixes_https(self):
+        with patch(
+            "geo_audit_arcade.server.run_geo_audit",
+            new=AsyncMock(return_value={}),
+        ) as mock:
+            from geo_audit_arcade.server import RunGeoSiteAudit
+
+            await RunGeoSiteAudit(target_url="arcade.dev")
+
+        mock.assert_awaited_once()
+        assert mock.call_args.kwargs["target_url"] == "https://arcade.dev"
 
 
 class TestRunGeoCompare:
@@ -90,7 +113,7 @@ class TestRunGeoCompare:
             )
 
         mock.assert_awaited_once_with(
-            target="arcade.dev",
+            target="https://arcade.dev",
             competitors=["composio.dev", "merge.dev"],
             audit_mode="exhaustive",
             coverage_preset="exhaustive",
@@ -118,12 +141,11 @@ class TestRunGeoCompare:
         ]
 
     @pytest.mark.asyncio
-    async def test_returns_error_on_empty_competitors(self):
+    async def test_raises_on_empty_competitors(self):
         from geo_audit_arcade.server import RunGeoCompare
 
-        result = await RunGeoCompare(target="arcade.dev", competitors="")
-        parsed = json.loads(result)
-        assert "error" in parsed
+        with pytest.raises(ToolExecutionError, match="No valid competitor URLs"):
+            await RunGeoCompare(target="arcade.dev", competitors="")
 
 
 class TestUrlParsing:

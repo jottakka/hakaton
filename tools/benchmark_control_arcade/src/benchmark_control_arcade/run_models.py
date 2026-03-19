@@ -30,6 +30,20 @@ class RunStatus(StrEnum):
     failed = "failed"
 
 
+class ReportFormat(StrEnum):
+    """Supported report output formats."""
+
+    md = "md"
+    json = "json"
+
+
+class GeoSearchRunType(StrEnum):
+    """Run types accepted by SearchGeoReports."""
+
+    geo = "geo"
+    geo_compare = "geo_compare"
+
+
 class RunSpec(BaseModel):
     """Input specification for a benchmark run.
 

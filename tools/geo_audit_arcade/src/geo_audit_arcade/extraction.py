@@ -5,8 +5,9 @@ from __future__ import annotations
 import json
 import re
 from difflib import SequenceMatcher
+from urllib.parse import urljoin, urlparse
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, NavigableString, Tag
 
 from .models import HeadingItem, JsonLdEntry, OpenGraphTags
 
@@ -123,8 +124,6 @@ def extract_first_200_words(soup: BeautifulSoup) -> str | None:
 
     Does NOT mutate the soup — uses NavigableString traversal with parent filtering.
     """
-    from bs4 import NavigableString
-
     body = soup.find("body")
     if not body:
         return None
@@ -148,8 +147,6 @@ def extract_first_200_words(soup: BeautifulSoup) -> str | None:
 
 def extract_domains_from_links(soup: BeautifulSoup, base_domain: str) -> set[str]:
     """Find additional domains/subdomains from nav, footer, and general links."""
-    from urllib.parse import urlparse
-
     domains: set[str] = set()
     for tag in soup.find_all("a", href=True):
         href = str(tag["href"])
@@ -211,8 +208,6 @@ def extract_internal_links(soup: BeautifulSoup, base_url: str) -> list[str]:
     Returns deduplicated absolute URLs, excluding the base URL itself.
     Does NOT mutate the soup.
     """
-    from urllib.parse import urljoin, urlparse
-
     parsed_base = urlparse(base_url)
     origin = f"{parsed_base.scheme}://{parsed_base.netloc}"
     base_path = parsed_base.path.rstrip("/") or "/"

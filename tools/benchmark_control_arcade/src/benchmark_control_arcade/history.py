@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from benchmark_control_arcade.github_client import GitHubClient, _decode
+from benchmark_control_arcade.github_client import GitHubClient
 from benchmark_control_arcade.history_layout import build_run_layout
 from benchmark_control_arcade.run_models import RunArtifact, RunRecord, RunStatus, RunType
 
@@ -22,8 +22,7 @@ async def fetch_run_report(
     """
     layout = build_run_layout(run_id, created_at)
     path = str(layout.report_md if fmt == "md" else layout.report_json)
-    data = await client._get_file(path)
-    return _decode(data["content"])
+    return await client.get_file_content(path)
 
 
 async def fetch_run_artifacts(
@@ -55,6 +54,55 @@ async def get_average_elapsed_seconds(
     ]
     samples = samples[:sample_limit]
     return sum(samples) / len(samples) if samples else None
+
+
+async def filter_runs(
+    client: GitHubClient,
+    run_type: str = "",
+    target: str = "",
+    status: str = "",
+    from_date: str = "",
+    to_date: str = "",
+    limit: int = 20,
+) -> list[RunRecord]:
+    """Return run records matching the given filters, newest first.
+
+    Works for any run type (aioa, geo, geo_compare).  All filters are
+    optional — omit or pass empty string to skip.
+
+    Args:
+        client: An authenticated GitHubClient.
+        run_type: "aioa", "geo", "geo_compare", or "" for all types.
+        target: Filter by spec.target — exact match, empty = all.
+        status: "completed", "failed", "running", "queued", or "" for all.
+        from_date: ISO-8601 date string (YYYY-MM-DD), inclusive lower bound.
+        to_date: ISO-8601 date string (YYYY-MM-DD), inclusive upper bound.
+        limit: Maximum number of records to return (default 20).
+    """
+    records = await client.list_run_records(limit=500)
+    results: list[RunRecord] = []
+
+    for record in records:
+        if run_type and record.run_type.value != run_type:
+            continue
+
+        if status and record.status.value != status:
+            continue
+
+        record_date = record.created_at.date().isoformat()
+        if from_date and record_date < from_date:
+            continue
+        if to_date and record_date > to_date:
+            continue
+
+        if target and record.spec.target != target:
+            continue
+
+        results.append(record)
+        if len(results) >= limit:
+            break
+
+    return results
 
 
 async def search_geo_reports(

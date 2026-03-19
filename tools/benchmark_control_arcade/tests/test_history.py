@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import base64
 import json
 from datetime import UTC, datetime
 from unittest.mock import AsyncMock, MagicMock
@@ -44,14 +43,13 @@ class TestFetchRunReport:
         from benchmark_control_arcade.history import fetch_run_report
 
         record = _make_record()
-        content_b64 = base64.b64encode(b"# My Report").decode()
         client = MagicMock()
-        client._get_file = AsyncMock(return_value={"content": content_b64, "sha": "abc"})
+        client.get_file_content = AsyncMock(return_value="# My Report")
 
         result = await fetch_run_report(client, record.run_id, record.created_at, fmt="md")
 
         assert result == "# My Report"
-        call_path = client._get_file.call_args[0][0]
+        call_path = client.get_file_content.call_args[0][0]
         assert call_path.endswith("report.md")
 
     @pytest.mark.asyncio
@@ -60,14 +58,13 @@ class TestFetchRunReport:
 
         record = _make_record()
         payload = json.dumps({"score": 87})
-        content_b64 = base64.b64encode(payload.encode()).decode()
         client = MagicMock()
-        client._get_file = AsyncMock(return_value={"content": content_b64, "sha": "abc"})
+        client.get_file_content = AsyncMock(return_value=payload)
 
         result = await fetch_run_report(client, record.run_id, record.created_at, fmt="json")
 
         assert '"score"' in result
-        call_path = client._get_file.call_args[0][0]
+        call_path = client.get_file_content.call_args[0][0]
         assert call_path.endswith("report.json")
 
 

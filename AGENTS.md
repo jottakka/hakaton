@@ -4,14 +4,14 @@
 - When asked to address open issues or follow-up tasks, plan and analyze first before writing any code or tests.
 - Arcade deploy is a manual operator action — never trigger `arcade deploy` or `deploy-mcp-servers.yml` automatically from a CI push; only via `workflow_dispatch`.
 - MCP tools that involve LLM analysis should be self-contained: one call receives the sites, fetches evidence internally, runs the analysis, validates, and returns the report. Do not expose separate tools for each step.
+- Prefer using Cursor MCP config/gateways for MCP tool execution instead of ad-hoc worker-style invocation.
+- Prefer Claude 4.6 family models; avoid Opus for general reasoning and reserve it for heavy multi-model analysis workloads.
 
 ## Learned Workspace Facts
 - The `geo-analyzer` MCP server in this workspace is an Arcade-backed **Linear issue management gateway** (create/update issues, list teams/projects/labels) — it is not a GEO audit tool despite the name.
 - This workspace includes a local `geo-site-audit` workflow backed by deterministic GEO audit tools in `tools/geo_audit_arcade/` (Arcade MCPApp v0.3.0) and `tools/geo_audit_local_mcp/` (FastMCP). The v0.3.0 server exposes `RunGeoSiteAudit` and `RunGeoCompare` as public tools; `CollectGeoEvidence`/`ValidateGeoAuditClaims` are now internal implementation details.
 - The canonical code repo is `ArcadeAI/ghost`; historical benchmark run records live on the `benchmark-data` orphan branch. The `geoaudit` and `benchcontrol` gateway slugs are the production cloud endpoints (`https://api.arcade.dev/mcp/geoaudit` and `https://api.arcade.dev/mcp/benchcontrol`).
-- The `benchmark-control` Arcade MCP server (`tools/benchmark_control_arcade/`) reads GitHub credentials from `ToolContext.get_secret()` (not `os.environ`) when deployed to Arcade Cloud. Every `@app.tool` must declare `requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO"]` or Arcade won't inject the secrets. The `_settings_from_context(ctx)` helper handles this with fallback to env vars for local dev.
-- Arcade injects declared secrets into `ToolContext`, not `os.environ`. `pydantic_settings.BaseSettings` cannot see them. Tools must accept `ctx: ToolContext` as first param and call `ctx.get_secret(key)`.
-- Arcade rejects secret names that don't follow its "prefixed ID format" (e.g. `GEO_AUDIT_MCP_URL`, `GITHUB_DATA_BRANCH` caused engine errors). Only truly secret values should be Arcade secrets; non-secret config must be hardcoded defaults in the `Settings` class.
+- The `benchmark-control` Arcade MCP server (`tools/benchmark_control_arcade/`) reads GitHub credentials from `ToolContext.get_secret()` (not `os.environ`) when deployed to Arcade Cloud. Arcade injects declared secrets into `ToolContext`, so each `@app.tool` must declare required secrets and tools should accept `ctx: ToolContext` as first param; non-secret config belongs in `Settings` defaults.
 - Arcade MCP servers auto-load credentials from `~/.arcade/credentials.yaml`; `ARCADE_API_KEY` is only required for the AIOA pipeline's direct `httpx` search calls, not for local MCP server startup.
 - Arcade gateway slugs are case-sensitive and project-scoped: `https://api.arcade.dev/mcp/aio` (lowercase) is the working Google Search gateway for this workspace; it requires the API key from the ghost Arcade project.
 - The AIOA pipeline currently runs in `seo_only` mode; the AIO model layer (LLM fan-out) is intentionally disabled. `arcade_avg_aio_score` is `None` in all pipeline output.
