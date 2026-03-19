@@ -37,12 +37,12 @@ class Settings(BaseSettings):
     github_repo: str
     github_token: SecretStr
 
-    # Defaults that match .env.example
+    # Defaults — not secrets, safe to hardcode
     github_data_branch: str = "benchmark-data"
     github_run_workflow: str = "run-benchmark.yml"
 
-    # Optional GEO runner MCP server URLs
-    geo_audit_mcp_url: str | None = None
+    # GEO runner MCP URLs — default to deployed Arcade gateways
+    geo_audit_mcp_url: str = "https://api.arcade.dev/mcp/geoaudit"
     geo_analyzer_mcp_url: str | None = None
 
     @field_validator("github_token", mode="before")
