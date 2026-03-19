@@ -38,6 +38,7 @@ _RUN_ID_RE = re.compile(r"^run-(\d{14})-")
 try:
     from benchmark_control_arcade import aioa_runner, geo_compare_runner, geo_runner
 except ModuleNotFoundError:
+
     async def _missing(*_args, **_kwargs):
         raise ModuleNotFoundError("Runner dependencies are not available in this environment.")
 

@@ -36,9 +36,6 @@ from arcade_mcp_server.metadata import (
     ToolMetadata,
 )
 from arcade_tdk import ToolContext
-from geo_audit_arcade.models import AuditMode, CoveragePreset
-from geo_audit_arcade.tools.run_geo_audit import run_geo_audit
-from geo_audit_arcade.tools.run_geo_compare import run_geo_compare
 
 from benchmark_control_arcade.compare import compare_aioa_runs
 from benchmark_control_arcade.config import Settings
@@ -128,23 +125,11 @@ def _validate_url(url: str, param_name: str = "target_url") -> str:
     return url
 
 
-def _parse_urls(raw: str) -> list[str]:
-    raw = raw.strip()
-    if raw.startswith("["):
-        try:
-            return [u.strip() for u in json.loads(raw) if u.strip()]
-        except (json.JSONDecodeError, TypeError):
-            pass
-    parts = re.split(r"[\n,]+", raw)
-    return [p.strip() for p in parts if p.strip()]
-
-
 app = MCPApp(
     name="BenchmarkControl",
     version="0.2.0",
     instructions=(
         "Control plane for AIOA and GEO benchmark runs. "
-        "Use RunGeoSiteAudit and RunGeoCompare for instant GEO audits. "
         "Use StartRun, GetRunStatus, ListRuns, GetLatestRun, GetRunReport, "
         "GetRunArtifacts, CompareAioaRuns, and SearchGeoReports for tracked runs."
     ),
@@ -504,72 +489,6 @@ async def _search_geo_reports(
         limit=limit,
     )
     return json.dumps([r.model_dump(mode="json") for r in records])
-
-
-@app.tool(
-    requires_secrets=_REQUIRED_SECRETS,
-    metadata=_AUDIT_METADATA,
-)
-async def RunGeoSiteAudit(
-    ctx: ToolContext,
-    target_url: Annotated[str, "URL to audit (e.g. 'https://arcade.dev')"],
-    audit_mode: Annotated[
-        AuditMode,
-        "Depth of analysis: quick=~30s, standard=~60s, exhaustive=~90s",
-    ] = AuditMode.EXHAUSTIVE,
-    coverage_preset: Annotated[
-        CoveragePreset,
-        "Page budget: light=5, standard=15, deep=30, exhaustive=60 pages",
-    ] = CoveragePreset.EXHAUSTIVE,
-    discover_subdomains: Annotated[bool, "Discover subdomains from page links"] = True,
-) -> Annotated[str, "Complete GEO audit report as JSON"]:
-    """Run a complete single-site GEO audit and return the structured report."""
-    del ctx
-    target_url = _validate_url(target_url, "target_url")
-    result = await run_geo_audit(
-        target_url=target_url,
-        audit_mode=audit_mode.value,
-        coverage_preset=coverage_preset.value,
-        discover_subdomains=discover_subdomains,
-    )
-    return json.dumps(result)
-
-
-@app.tool(
-    requires_secrets=_REQUIRED_SECRETS,
-    metadata=_AUDIT_METADATA,
-)
-async def RunGeoCompare(
-    ctx: ToolContext,
-    target: Annotated[str, "Primary site to audit (e.g. 'arcade.dev')"],
-    competitors: Annotated[str, "Competitor URLs, comma-separated or JSON array"],
-    audit_mode: Annotated[
-        AuditMode,
-        "Depth of analysis: quick=~30s, standard=~60s, exhaustive=~90s",
-    ] = AuditMode.EXHAUSTIVE,
-    coverage_preset: Annotated[
-        CoveragePreset,
-        "Page budget: light=5, standard=15, deep=30, exhaustive=60 pages",
-    ] = CoveragePreset.EXHAUSTIVE,
-    discover_subdomains: Annotated[bool, "Discover subdomains from page links"] = True,
-) -> Annotated[str, "Complete GEO comparison report as JSON"]:
-    """Run a complete GEO competitive comparison for target vs competitors."""
-    del ctx
-    target = _validate_url(target, "target")
-    competitor_list = _parse_urls(competitors)
-    if not competitor_list:
-        raise ToolExecutionError(
-            "No valid competitor URLs provided in `competitors`.",
-            developer_message=f"Received competitors={competitors!r} -> empty list.",
-        )
-    result = await run_geo_compare(
-        target=target,
-        competitors=competitor_list,
-        audit_mode=audit_mode.value,
-        coverage_preset=coverage_preset.value,
-        discover_subdomains=discover_subdomains,
-    )
-    return json.dumps(result)
 
 
 @app.tool(

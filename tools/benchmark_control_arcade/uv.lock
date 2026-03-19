@@ -363,13 +363,12 @@ wheels = [
 
 [[package]]
 name = "benchmark-control-arcade"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "anthropic" },
     { name = "arcade-mcp-server" },
     { name = "beautifulsoup4" },
-    { name = "geo-audit-arcade" },
     { name = "httpx" },
     { name = "lxml" },
     { name = "pydantic" },
@@ -380,6 +379,7 @@ dependencies = [
 [package.optional-dependencies]
 runners = [
     { name = "aio-analyzer" },
+    { name = "geo-audit-arcade" },
 ]
 
 [package.dev-dependencies]
@@ -397,7 +397,7 @@ requires-dist = [
     { name = "anthropic", specifier = ">=0.40.0,<1.0.0" },
     { name = "arcade-mcp-server", specifier = ">=1.11.1,<2.0.0" },
     { name = "beautifulsoup4" },
-    { name = "geo-audit-arcade", editable = "../geo_audit_arcade" },
+    { name = "geo-audit-arcade", marker = "extra == 'runners'", editable = "../geo_audit_arcade" },
     { name = "httpx", specifier = ">=0.27.2,<1.0.0" },
     { name = "lxml" },
     { name = "pydantic", specifier = ">=2.0.0" },
@@ -920,7 +920,7 @@ wheels = [
 
 [[package]]
 name = "geo-audit-arcade"
-version = "0.3.0"
+version = "0.4.0"
 source = { editable = "../geo_audit_arcade" }
 dependencies = [
     { name = "anthropic" },

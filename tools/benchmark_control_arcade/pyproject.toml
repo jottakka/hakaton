@@ -16,13 +16,14 @@ dependencies = [
     "anthropic>=0.40.0,<1.0.0",
     "beautifulsoup4",
     "lxml",
-    "geo-audit-arcade",
 ]
 
 [project.optional-dependencies]
-# aio-analyzer is a local editable path dep used only by aioa_runner.py
-# (which runs in GitHub Actions, not in the deployed MCP server).
-runners = ["aio-analyzer"]
+# These path deps are only needed by the runners (GitHub Actions) not the deployed MCP server.
+runners = [
+    "aio-analyzer",
+    "geo-audit-arcade",
+]
 
 [[project.authors]]
 name = "Arcade"
