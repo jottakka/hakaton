@@ -34,7 +34,7 @@ from geo_audit_arcade.tools.run_geo_compare import run_geo_compare
 
 app = MCPApp(
     name="GeoAudit",
-    version="0.3.0",
+    version="0.4.0",
     instructions=(
         "GEO audit server. "
         "RunGeoSiteAudit audits a single site end-to-end: collects evidence, "

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "benchmark-control-arcade"
-version = "0.1.0"
+version = "0.2.0"
 description = "Arcade MCP control plane for triggering and tracking AIOA and GEO benchmark runs"
 requires-python = ">=3.11"
 dependencies = [
