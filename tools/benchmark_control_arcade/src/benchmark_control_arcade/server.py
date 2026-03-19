@@ -134,7 +134,7 @@ async def _compare_aioa_runs(
 # ---------------------------------------------------------------------------
 
 
-@app.tool
+@app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def StartRun(
     run_type: Annotated[str, "Run type: 'aioa', 'geo', or 'geo_compare'"],
     target: Annotated[str, "URL or target identifier for the benchmark"],
@@ -156,7 +156,7 @@ async def StartRun(
     return json.dumps(result)
 
 
-@app.tool
+@app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def GetRunStatus(
     run_id: Annotated[str, "The run identifier returned by StartRun"],
     created_at: Annotated[str, "ISO-8601 creation timestamp from the RunRecord"],
@@ -167,7 +167,7 @@ async def GetRunStatus(
     return await _get_run_status(client, run_id, created_at)
 
 
-@app.tool
+@app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def ListRuns(
     limit: Annotated[int, "Maximum number of runs to return (default: 20)"] = 20,
 ) -> Annotated[str, "JSON array of RunRecord objects, newest first"]:
@@ -177,7 +177,7 @@ async def ListRuns(
     return await _list_runs(client, limit=limit)
 
 
-@app.tool
+@app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def GetRunReport(
     run_id: Annotated[str, "The run identifier"],
     created_at: Annotated[str, "ISO-8601 creation timestamp from the RunRecord"],
@@ -189,7 +189,7 @@ async def GetRunReport(
     return await _get_run_report(client, run_id, created_at, fmt=fmt)
 
 
-@app.tool
+@app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def GetRunArtifacts(
     run_id: Annotated[str, "The run identifier"],
     created_at: Annotated[str, "ISO-8601 creation timestamp from the RunRecord"],
@@ -200,7 +200,7 @@ async def GetRunArtifacts(
     return await _get_run_artifacts(client, run_id, created_at)
 
 
-@app.tool
+@app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def CompareAioaRuns(
     run_id_a: Annotated[str, "First AIOA run identifier"],
     created_at_a: Annotated[str, "ISO-8601 creation timestamp of the first run"],
@@ -238,7 +238,7 @@ async def _search_geo_reports(
     return json.dumps([json.loads(r.model_dump_json()) for r in records])
 
 
-@app.tool
+@app.tool(requires_secrets=["GITHUB_TOKEN", "GITHUB_OWNER", "GITHUB_REPO", "ANTHROPIC_API_KEY"])
 async def SearchGeoReports(
     target: Annotated[str, "Primary site being audited (e.g. 'arcade.dev'). Empty = all."] = "",
     competitor: Annotated[str, "Filter runs that include this competitor URL. Empty = all."] = "",

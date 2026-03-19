@@ -44,7 +44,7 @@ def _parse_urls(raw: str) -> list[str]:
     return [p.strip() for p in parts if p.strip()]
 
 
-@app.tool
+@app.tool(requires_secrets=["ANTHROPIC_API_KEY"])
 async def RunGeoSiteAudit(
     target_url: Annotated[str, "URL to audit (e.g. 'https://arcade.dev')"],
     audit_mode: Annotated[str, "exhaustive (default), standard, or quick"] = "exhaustive",
@@ -66,7 +66,7 @@ async def RunGeoSiteAudit(
     return json.dumps(result, indent=2)
 
 
-@app.tool
+@app.tool(requires_secrets=["ANTHROPIC_API_KEY"])
 async def RunGeoCompare(
     target: Annotated[str, "Primary site to audit (e.g. 'arcade.dev')"],
     competitors: Annotated[str, "Competitor URLs, comma-separated or JSON array"],
