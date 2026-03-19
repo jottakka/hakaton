@@ -24,8 +24,8 @@ import sys
 import tempfile
 from datetime import UTC, datetime
 from pathlib import Path
+from types import SimpleNamespace
 
-from benchmark_control_arcade import aioa_runner, geo_compare_runner, geo_runner
 from benchmark_control_arcade.config import Settings
 from benchmark_control_arcade.github_client import GitHubClient
 from benchmark_control_arcade.history_layout import build_run_layout
@@ -34,6 +34,18 @@ from benchmark_control_arcade.run_models import RunArtifact, RunSpec, RunStatus,
 logger = logging.getLogger(__name__)
 
 _RUN_ID_RE = re.compile(r"^run-(\d{14})-")
+
+try:
+    from benchmark_control_arcade import aioa_runner, geo_compare_runner, geo_runner
+except ModuleNotFoundError:
+    async def _missing(*_args, **_kwargs):
+        raise ModuleNotFoundError("Runner dependencies are not available in this environment.")
+
+    aioa_runner = SimpleNamespace(run_aioa_benchmark=_missing, _is_placeholder=True)  # type: ignore[assignment]
+    geo_compare_runner = SimpleNamespace(  # type: ignore[assignment]
+        run_geo_compare_benchmark=_missing, _is_placeholder=True
+    )
+    geo_runner = SimpleNamespace(run_geo_benchmark=_missing, _is_placeholder=True)  # type: ignore[assignment]
 
 
 def _parse_created_at_from_run_id(run_id: str) -> datetime | None:
@@ -137,6 +149,31 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
         try:
             spec = RunSpec.model_validate_json(run_spec_json)
             rtype = RunType(run_type)
+            global aioa_runner, geo_compare_runner, geo_runner
+            if (
+                rtype == RunType.aioa
+                and getattr(aioa_runner, "_is_placeholder", False)
+                and getattr(aioa_runner, "run_aioa_benchmark", None) is _missing
+            ):
+                from benchmark_control_arcade import aioa_runner as _aioa_runner
+
+                aioa_runner = _aioa_runner
+            if (
+                rtype == RunType.geo
+                and getattr(geo_runner, "_is_placeholder", False)
+                and getattr(geo_runner, "run_geo_benchmark", None) is _missing
+            ):
+                from benchmark_control_arcade import geo_runner as _geo_runner
+
+                geo_runner = _geo_runner
+            if (
+                rtype == RunType.geo_compare
+                and getattr(geo_compare_runner, "_is_placeholder", False)
+                and getattr(geo_compare_runner, "run_geo_compare_benchmark", None) is _missing
+            ):
+                from benchmark_control_arcade import geo_compare_runner as _geo_compare_runner
+
+                geo_compare_runner = _geo_compare_runner
 
             if rtype == RunType.aioa:
                 result = await aioa_runner.run_aioa_benchmark(spec, run_id, output_dir)

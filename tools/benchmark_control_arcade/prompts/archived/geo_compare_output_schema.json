@@ -1,0 +1,5 @@
+{
+  "archived": true,
+  "reason": "Legacy schema used by claude-agent-sdk geo compare runner flow",
+  "replacement": "Direct call to geo_audit_arcade.tools.run_geo_compare.run_geo_compare()"
+}

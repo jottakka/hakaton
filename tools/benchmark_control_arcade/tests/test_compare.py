@@ -109,3 +109,18 @@ class TestCompareAioaRuns:
 
         assert result["status_a"] == "completed"
         assert result["status_b"] == "completed"
+
+    def test_result_includes_elapsed_and_artifacts(self):
+        from benchmark_control_arcade.compare import compare_aioa_runs
+
+        a = _make_aioa_record("run-a")
+        b = _make_aioa_record("run-b")
+        a.elapsed_seconds = 12.3
+        b.elapsed_seconds = 45.6
+
+        result = compare_aioa_runs(a, b)
+
+        assert result["elapsed_seconds_a"] == 12.3
+        assert result["elapsed_seconds_b"] == 45.6
+        assert result["artifacts_a"] == []
+        assert result["artifacts_b"] == []

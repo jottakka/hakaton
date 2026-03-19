@@ -13,7 +13,10 @@ dependencies = [
     "pydantic>=2.0.0",
     "pydantic-settings>=2.0.0",
     "tenacity>=8.0.0",
-    "claude-agent-sdk>=0.1.10; sys_platform == 'darwin'",
+    "anthropic>=0.40.0,<1.0.0",
+    "beautifulsoup4",
+    "lxml",
+    "geo-audit-arcade",
 ]
 
 [project.optional-dependencies]
@@ -57,3 +60,4 @@ asyncio_mode = "auto"
 
 [tool.uv.sources]
 aio-analyzer = { path = "../../aioa", editable = true }
+geo-audit-arcade = { path = "../geo_audit_arcade", editable = true }

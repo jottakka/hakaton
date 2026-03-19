@@ -14,6 +14,7 @@ from __future__ import annotations
 import json
 import os
 import re
+from datetime import UTC, datetime
 from typing import Any
 
 import anthropic
@@ -174,5 +175,6 @@ async def run_geo_compare(
         evidence=evidence,
     )
     result["validation"] = json.loads(validation.model_dump_json(by_alias=True))
+    result["run_timestamp"] = datetime.now(UTC).isoformat()
 
     return result

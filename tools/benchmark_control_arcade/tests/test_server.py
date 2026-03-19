@@ -42,7 +42,7 @@ class TestAppLoads:
         from benchmark_control_arcade.server import app
 
         assert app.name == "BenchmarkControl"
-        assert app.version == "0.1.0"
+        assert app.version == "0.2.0"
 
     def test_app_has_instructions(self):
         from benchmark_control_arcade.server import app
@@ -413,3 +413,303 @@ class TestCompareAioaRuns:
         parsed = json.loads(result)
         assert parsed["run_id_a"] == "run-a"
         assert parsed["run_id_b"] == "run-b"
+
+
+# ---------------------------------------------------------------------------
+# Tests: filter_runs helper
+# ---------------------------------------------------------------------------
+
+
+def _make_records_mix() -> list[RunRecord]:
+    """Return a mix of AIOA and GEO records across two dates for filtering tests."""
+    dates = [
+        datetime(2026, 3, 18, 12, 0, 0, tzinfo=UTC),
+        datetime(2026, 3, 19, 9, 0, 0, tzinfo=UTC),
+    ]
+    records = [
+        RunRecord(
+            run_id="run-aioa-mar18",
+            run_type=RunType.aioa,
+            status=RunStatus.completed,
+            created_at=dates[0],
+            updated_at=dates[0],
+            repo="acme/benchmarks",
+            workflow_name="run-benchmark.yml",
+            data_branch="benchmark-data",
+            spec=RunSpec(run_type=RunType.aioa, target="arcade.dev"),
+            elapsed_seconds=30.0,
+        ),
+        RunRecord(
+            run_id="run-geo-mar18",
+            run_type=RunType.geo,
+            status=RunStatus.completed,
+            created_at=dates[0],
+            updated_at=dates[0],
+            repo="acme/benchmarks",
+            workflow_name="run-benchmark.yml",
+            data_branch="benchmark-data",
+            spec=RunSpec(run_type=RunType.geo, target="composio.dev"),
+        ),
+        RunRecord(
+            run_id="run-aioa-mar19",
+            run_type=RunType.aioa,
+            status=RunStatus.failed,
+            created_at=dates[1],
+            updated_at=dates[1],
+            repo="acme/benchmarks",
+            workflow_name="run-benchmark.yml",
+            data_branch="benchmark-data",
+            spec=RunSpec(run_type=RunType.aioa, target="arcade.dev"),
+            error="boom",
+        ),
+    ]
+    return records
+
+
+@pytest.mark.asyncio
+async def test_filter_runs_by_type():
+    """filter_runs with run_type='aioa' returns only AIOA records."""
+    from benchmark_control_arcade.history import filter_runs
+
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=_make_records_mix())
+
+    results = await filter_runs(mock_client, run_type="aioa", limit=10)
+    assert all(r.run_type == RunType.aioa for r in results)
+    assert len(results) == 2
+
+
+@pytest.mark.asyncio
+async def test_filter_runs_by_status():
+    """filter_runs with status='failed' returns only failed records."""
+    from benchmark_control_arcade.history import filter_runs
+
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=_make_records_mix())
+
+    results = await filter_runs(mock_client, status="failed", limit=10)
+    assert all(r.status == RunStatus.failed for r in results)
+    assert len(results) == 1
+
+
+@pytest.mark.asyncio
+async def test_filter_runs_by_date():
+    """filter_runs with from_date='2026-03-19' returns only Mar 19 records."""
+    from benchmark_control_arcade.history import filter_runs
+
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=_make_records_mix())
+
+    results = await filter_runs(mock_client, from_date="2026-03-19", limit=10)
+    assert all(r.created_at.date().isoformat() >= "2026-03-19" for r in results)
+    assert len(results) == 1
+    assert results[0].run_id == "run-aioa-mar19"
+
+
+@pytest.mark.asyncio
+async def test_filter_runs_by_target():
+    """filter_runs with target='arcade.dev' returns only runs for that target."""
+    from benchmark_control_arcade.history import filter_runs
+
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=_make_records_mix())
+
+    results = await filter_runs(mock_client, target="arcade.dev", limit=10)
+    assert all(r.spec.target == "arcade.dev" for r in results)
+    assert len(results) == 2
+
+
+@pytest.mark.asyncio
+async def test_filter_runs_limit():
+    """filter_runs respects the limit parameter."""
+    from benchmark_control_arcade.history import filter_runs
+
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=_make_records_mix())
+
+    results = await filter_runs(mock_client, limit=1)
+    assert len(results) == 1
+
+
+# ---------------------------------------------------------------------------
+# Tests: GetLatestRun tool
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_get_latest_run_returns_most_recent_completed(monkeypatch):
+    """GetLatestRun with defaults returns the newest completed run."""
+    monkeypatch.setenv("GITHUB_OWNER", "acme")
+    monkeypatch.setenv("GITHUB_REPO", "benchmarks")
+    monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+
+    records = _make_records_mix()
+    # completed records are implicitly filtered by default status param
+
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=records)
+
+    from unittest.mock import MagicMock
+
+    from benchmark_control_arcade.server import GetLatestRun
+
+    ctx = MagicMock()
+    ctx.get_secret = MagicMock(side_effect=ValueError)
+
+    with patch("benchmark_control_arcade.server.GitHubClient", return_value=mock_client):
+        result = await GetLatestRun(ctx)
+
+    data = json.loads(result)
+    assert data.get("error") is None or "error" not in data
+    assert data["status"] == "completed"
+
+
+@pytest.mark.asyncio
+async def test_get_latest_run_no_match_raises_error(monkeypatch):
+    """GetLatestRun raises ToolExecutionError when no run matches."""
+    monkeypatch.setenv("GITHUB_OWNER", "acme")
+    monkeypatch.setenv("GITHUB_REPO", "benchmarks")
+    monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=[])
+
+    from unittest.mock import MagicMock
+
+    from arcade_mcp_server.exceptions import ToolExecutionError
+
+    from benchmark_control_arcade.server import GetLatestRun
+
+    ctx = MagicMock()
+    ctx.get_secret = MagicMock(side_effect=ValueError)
+
+    with (
+        patch("benchmark_control_arcade.server.GitHubClient", return_value=mock_client),
+        pytest.raises(ToolExecutionError, match="No matching run found"),
+    ):
+        await GetLatestRun(ctx, run_type=RunType.geo, target="missing.dev")
+
+
+# ---------------------------------------------------------------------------
+# Tests: upgraded ListRuns with filters
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_list_runs_with_run_type_filter(monkeypatch):
+    """ListRuns with run_type='geo' returns only GEO records."""
+    monkeypatch.setenv("GITHUB_OWNER", "acme")
+    monkeypatch.setenv("GITHUB_REPO", "benchmarks")
+    monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+
+    records = _make_records_mix()
+    mock_client = AsyncMock()
+    mock_client.list_run_records = AsyncMock(return_value=records)
+
+    from unittest.mock import MagicMock
+
+    from benchmark_control_arcade.server import ListRuns
+
+    ctx = MagicMock()
+    ctx.get_secret = MagicMock(side_effect=ValueError)
+
+    with patch("benchmark_control_arcade.server.GitHubClient", return_value=mock_client):
+        result = await ListRuns(ctx, run_type=RunType.geo)
+
+    runs = json.loads(result)
+    assert all(r["run_type"] == "geo" for r in runs)
+    assert len(runs) == 1
+
+
+class TestGeoAuditTools:
+    @pytest.mark.asyncio
+    async def test_run_geo_site_audit_delegates_and_returns_json(self, monkeypatch):
+        monkeypatch.setenv("GITHUB_OWNER", "acme")
+        monkeypatch.setenv("GITHUB_REPO", "benchmarks")
+        monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+
+        from unittest.mock import MagicMock
+
+        from geo_audit_arcade.models import AuditMode, CoveragePreset
+
+        from benchmark_control_arcade.server import RunGeoSiteAudit
+
+        ctx = MagicMock()
+        ctx.get_secret = MagicMock(side_effect=ValueError)
+
+        with patch(
+            "benchmark_control_arcade.server.run_geo_audit",
+            new=AsyncMock(return_value={"overall_score": 77, "report_markdown": "# ok"}),
+        ) as mock_run:
+            result = await RunGeoSiteAudit(
+                ctx,
+                target_url="arcade.dev",
+                audit_mode=AuditMode.QUICK,
+                coverage_preset=CoveragePreset.LIGHT,
+                discover_subdomains=False,
+            )
+
+        payload = json.loads(result)
+        assert payload["overall_score"] == 77
+        assert mock_run.await_args.kwargs == {
+            "target_url": "https://arcade.dev",
+            "audit_mode": "quick",
+            "coverage_preset": "light",
+            "discover_subdomains": False,
+        }
+
+    @pytest.mark.asyncio
+    async def test_run_geo_compare_rejects_empty_competitors(self, monkeypatch):
+        monkeypatch.setenv("GITHUB_OWNER", "acme")
+        monkeypatch.setenv("GITHUB_REPO", "benchmarks")
+        monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+
+        from unittest.mock import MagicMock
+
+        from arcade_mcp_server.exceptions import ToolExecutionError
+
+        from benchmark_control_arcade.server import RunGeoCompare
+
+        ctx = MagicMock()
+        ctx.get_secret = MagicMock(side_effect=ValueError)
+
+        with pytest.raises(ToolExecutionError, match="No valid competitor URLs"):
+            await RunGeoCompare(ctx, target="arcade.dev", competitors="  ")
+
+    @pytest.mark.asyncio
+    async def test_run_geo_compare_delegates_and_returns_json(self, monkeypatch):
+        monkeypatch.setenv("GITHUB_OWNER", "acme")
+        monkeypatch.setenv("GITHUB_REPO", "benchmarks")
+        monkeypatch.setenv("GITHUB_TOKEN", "ghp_test")
+
+        from unittest.mock import MagicMock
+
+        from geo_audit_arcade.models import AuditMode, CoveragePreset
+
+        from benchmark_control_arcade.server import RunGeoCompare
+
+        ctx = MagicMock()
+        ctx.get_secret = MagicMock(side_effect=ValueError)
+
+        with patch(
+            "benchmark_control_arcade.server.run_geo_compare",
+            new=AsyncMock(return_value={"overall_winner": "https://arcade.dev"}),
+        ) as mock_run:
+            result = await RunGeoCompare(
+                ctx,
+                target="arcade.dev",
+                competitors="https://composio.dev, https://merge.dev",
+                audit_mode=AuditMode.STANDARD,
+                coverage_preset=CoveragePreset.DEEP,
+                discover_subdomains=True,
+            )
+
+        payload = json.loads(result)
+        assert payload["overall_winner"] == "https://arcade.dev"
+        assert mock_run.await_args.kwargs == {
+            "target": "https://arcade.dev",
+            "competitors": ["https://composio.dev", "https://merge.dev"],
+            "audit_mode": "standard",
+            "coverage_preset": "deep",
+            "discover_subdomains": True,
+        }

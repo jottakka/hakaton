@@ -20,10 +20,6 @@ class Settings(BaseSettings):
         github_data_branch: Branch that stores historical run records.
         github_run_workflow: Workflow file dispatched by StartRun.
 
-    Optional GEO runner settings:
-        geo_audit_mcp_url: HTTP URL for the geo-audit MCP server. Required when
-            run_type is "geo".
-        geo_analyzer_mcp_url: HTTP URL for the geo-analyzer MCP server.
     """
 
     model_config = SettingsConfigDict(
@@ -40,10 +36,6 @@ class Settings(BaseSettings):
     # Defaults — not secrets, safe to hardcode
     github_data_branch: str = "benchmark-data"
     github_run_workflow: str = "run-benchmark.yml"
-
-    # GEO runner MCP URLs — default to deployed Arcade gateways
-    geo_audit_mcp_url: str = "https://api.arcade.dev/mcp/geoaudit"
-    geo_analyzer_mcp_url: str | None = None
 
     @field_validator("github_token", mode="before")
     @classmethod

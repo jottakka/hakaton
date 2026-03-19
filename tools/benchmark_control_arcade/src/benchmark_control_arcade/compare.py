@@ -34,4 +34,8 @@ def compare_aioa_runs(record_a: RunRecord, record_b: RunRecord) -> dict[str, Any
         "summary_b": record_b.summary,
         "created_at_a": record_a.created_at.isoformat(),
         "created_at_b": record_b.created_at.isoformat(),
+        "elapsed_seconds_a": record_a.elapsed_seconds,
+        "elapsed_seconds_b": record_b.elapsed_seconds,
+        "artifacts_a": [a.model_dump() for a in record_a.artifacts],
+        "artifacts_b": [a.model_dump() for a in record_b.artifacts],
     }

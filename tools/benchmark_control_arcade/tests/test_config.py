@@ -12,7 +12,7 @@ class TestSettings:
         from benchmark_control_arcade.config import Settings
 
         with pytest.raises(ValidationError):
-            Settings()
+            Settings(_env_file=None)
 
     def test_settings_require_github_repo(self, monkeypatch):
         monkeypatch.setenv("GITHUB_OWNER", "acme")
@@ -21,7 +21,7 @@ class TestSettings:
         from benchmark_control_arcade.config import Settings
 
         with pytest.raises(ValidationError):
-            Settings()
+            Settings(_env_file=None)
 
     def test_settings_require_github_token(self, monkeypatch):
         monkeypatch.setenv("GITHUB_OWNER", "acme")
@@ -30,7 +30,7 @@ class TestSettings:
         from benchmark_control_arcade.config import Settings
 
         with pytest.raises(ValidationError):
-            Settings()
+            Settings(_env_file=None)
 
     def test_settings_default_data_branch(self, monkeypatch):
         monkeypatch.setenv("GITHUB_OWNER", "acme")
