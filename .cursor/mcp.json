@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "benchcontrol-local": {
+      "command": "uv",
+      "args": [
+        "run",
+        "python",
+        "-m",
+        "benchmark_control_arcade.server"
+      ],
+      "cwd": "tools/benchmark_control_arcade"
+    },
+    "geoaudit-local": {
+      "command": "uv",
+      "args": [
+        "run",
+        "python",
+        "-m",
+        "geo_audit_arcade.server"
+      ],
+      "cwd": "tools/geo_audit_arcade"
+    }
+  }
+}
