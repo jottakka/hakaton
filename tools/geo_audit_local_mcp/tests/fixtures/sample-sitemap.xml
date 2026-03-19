@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.acme.dev/pricing</loc></url>
-  <url><loc>https://www.acme.dev/customers</loc></url>
-  <url><loc>https://docs.acme.dev/quickstart</loc></url>
-  <url><loc>https://docs.acme.dev/guides/auth</loc></url>
-  <url><loc>https://docs.acme.dev/guides/tools</loc></url>
-  <url><loc>https://blog.acme.dev/launch</loc></url>
-</urlset>

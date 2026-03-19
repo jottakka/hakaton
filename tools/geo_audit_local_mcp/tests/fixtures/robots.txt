@@ -1,5 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://www.acme.dev/sitemap.xml
-Sitemap: https://www.acme.dev/sitemap-blog.xml
