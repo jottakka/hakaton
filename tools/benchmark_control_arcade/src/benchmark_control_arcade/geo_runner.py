@@ -179,15 +179,22 @@ async def run_geo_benchmark(spec: RunSpec, run_id: str, output_dir: Path) -> dic
 
     result_text: str | None = None
     async for message in query(prompt=user_prompt, options=options):
-        # Collect the last ResultMessage text
         msg_type = type(message).__name__
         if msg_type == "ResultMessage":
-            content = getattr(message, "content", None)
-            if content:
-                for block in content:
-                    block_type = getattr(block, "type", None)
-                    if block_type == "text":
-                        result_text = getattr(block, "text", "")
+            # SDK >= 0.1.49: result is a direct str field on ResultMessage
+            result_text = getattr(message, "result", None) or result_text
+            if not result_text:
+                # Older SDK: content list with typed text blocks
+                content = getattr(message, "content", None)
+                if content:
+                    for block in content:
+                        if getattr(block, "type", None) == "text":
+                            result_text = getattr(block, "text", "")
+        elif msg_type == "AssistantMessage":
+            # Capture last assistant text as fallback
+            for block in getattr(message, "content", []):
+                if getattr(block, "type", None) == "text":
+                    result_text = getattr(block, "text", "")
 
     if not result_text:
         raise RuntimeError(f"GEO benchmark run {run_id} produced no result text from the agent.")
