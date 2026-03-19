@@ -75,3 +75,7 @@ class RunRecord(BaseModel):
     artifacts: list[RunArtifact] = Field(default_factory=list)
     summary: dict[str, Any] | None = None
     error: str | None = None
+    elapsed_seconds: float | None = Field(
+        default=None,
+        description="Wall-clock seconds from run start to completion or failure.",
+    )

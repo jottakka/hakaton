@@ -131,6 +131,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
     # ------------------------------------------------------------------
     # Execute the benchmark
     # ------------------------------------------------------------------
+    run_start = datetime.now(tz=UTC)
     with tempfile.TemporaryDirectory() as tmp_dir:
         output_dir = Path(tmp_dir)
         try:
@@ -177,6 +178,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                     )
 
             summary = result.get("summary") or {k: v for k, v in result.items() if k != "run_id"}
+            elapsed = (datetime.now(tz=UTC) - run_start).total_seconds()
 
             if running_record is not None:
                 completed_record = running_record.model_copy(
@@ -186,6 +188,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                         "artifacts": artifacts,
                         "summary": summary,
                         "error": None,
+                        "elapsed_seconds": elapsed,
                     }
                 )
             else:
@@ -203,6 +206,7 @@ async def run_workflow(run_id: str, run_type: str, run_spec_json: str) -> None:
                     spec=spec,
                     artifacts=artifacts,
                     summary=summary,
+                    elapsed_seconds=elapsed,
                 )
             await client.update_run_record(completed_record)
             logger.info("Run %s completed successfully", run_id)

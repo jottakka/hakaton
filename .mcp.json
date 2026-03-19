@@ -10,7 +10,9 @@
         "src/geo_audit_arcade/server.py",
         "stdio"
       ],
-      "env": {}
+      "env": {
+        "ANTHROPIC_API_KEY": ""
+      }
     },
     "benchmark-control": {
       "command": "uv",

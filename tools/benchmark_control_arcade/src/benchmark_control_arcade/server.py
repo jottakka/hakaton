@@ -31,6 +31,7 @@ from benchmark_control_arcade.github_client import GitHubClient
 from benchmark_control_arcade.history import (
     fetch_run_artifacts,
     fetch_run_report,
+    get_average_elapsed_seconds,
     search_geo_reports,
 )
 from benchmark_control_arcade.run_models import (
@@ -138,12 +139,21 @@ async def StartRun(
     run_type: Annotated[str, "Run type: 'aioa', 'geo', or 'geo_compare'"],
     target: Annotated[str, "URL or target identifier for the benchmark"],
     options_json: Annotated[str, "JSON object of extra run options (default: {})"] = "{}",
-) -> Annotated[str, "Queued RunRecord as JSON"]:
-    """Queue a new benchmark run and return the initial RunRecord."""
+) -> Annotated[str, "Queued RunRecord as JSON with estimated_wait_seconds"]:
+    """Queue a new benchmark run and return the initial RunRecord.
+
+    The response includes an `estimated_wait_seconds` field computed from the
+    average elapsed time of recent *completed* runs of the same type.
+    Failed runs are excluded from the average.  Returns null when no history
+    exists yet.
+    """
     settings = Settings()
     client = GitHubClient(settings)
     record = await _start_run(settings, client, run_type, target, options_json)
-    return record.model_dump_json()
+    avg = await get_average_elapsed_seconds(client, run_type)
+    result = json.loads(record.model_dump_json())
+    result["estimated_wait_seconds"] = round(avg) if avg is not None else None
+    return json.dumps(result)
 
 
 @app.tool

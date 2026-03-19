@@ -6,7 +6,7 @@ from datetime import datetime
 
 from benchmark_control_arcade.github_client import GitHubClient, _decode
 from benchmark_control_arcade.history_layout import build_run_layout
-from benchmark_control_arcade.run_models import RunArtifact, RunRecord, RunType
+from benchmark_control_arcade.run_models import RunArtifact, RunRecord, RunStatus, RunType
 
 
 async def fetch_run_report(
@@ -32,6 +32,29 @@ async def fetch_run_artifacts(
     """Return the list of artifacts recorded in the run's run.json."""
     record = await client.get_run_record(run_id, created_at)
     return record.artifacts
+
+
+async def get_average_elapsed_seconds(
+    client: GitHubClient,
+    run_type: str,
+    sample_limit: int = 20,
+) -> float | None:
+    """Return the mean elapsed_seconds of the last *sample_limit* completed runs
+    of *run_type*.
+
+    Failed runs are excluded — they do not represent a typical wait time.
+    Returns None when no completed runs with timing data exist yet.
+    """
+    records = await client.list_run_records(limit=sample_limit * 3)
+    samples = [
+        r.elapsed_seconds
+        for r in records
+        if r.run_type.value == run_type
+        and r.status == RunStatus.completed
+        and r.elapsed_seconds is not None
+    ]
+    samples = samples[:sample_limit]
+    return sum(samples) / len(samples) if samples else None
 
 
 async def search_geo_reports(
