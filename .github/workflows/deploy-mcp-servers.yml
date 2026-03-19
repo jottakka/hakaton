@@ -8,9 +8,9 @@ on:
       server:
         description: "Which server to deploy"
         required: false
-        default: "both"
+        default: "benchmark_control"
         type: choice
-        options: [both, geo_audit, benchmark_control]
+        options: [benchmark_control]
 
 concurrency:
   group: deploy-mcp
@@ -23,49 +23,6 @@ env:
   ARCADE_CREDENTIALS_B64: ${{ secrets.ARCADE_CREDENTIALS }}
 
 jobs:
-  # -------------------------------------------------------------------------
-  # GeoAudit
-  # -------------------------------------------------------------------------
-  deploy-geo-audit:
-    name: Deploy GeoAudit to Arcade Cloud
-    runs-on: macos-latest
-    if: inputs.server == 'both' || inputs.server == 'geo_audit'
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
-
-      - name: Install Arcade CLI
-        run: pip install arcade-mcp==1.8.2
-
-      - name: Restore Arcade credentials
-        run: |
-          mkdir -p ~/.arcade
-          echo "${{ secrets.ARCADE_CREDENTIALS }}" | base64 --decode > ~/.arcade/credentials.yaml
-          arcade project set fd3339bd-0eee-4306-a838-8b2008dc6b3b
-
-      - name: Sync deps
-        run: uv sync --project tools/geo_audit_arcade
-
-      - name: Get server version
-        id: ver
-        run: |
-          VERSION=$(python3 -c "import tomllib; print(tomllib.load(open('tools/geo_audit_arcade/pyproject.toml','rb'))['project']['version'])")
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Deploy GeoAudit v${{ steps.ver.outputs.version }}
-        working-directory: tools/geo_audit_arcade
-        run: |
-          arcade deploy \
-            --entrypoint src/geo_audit_arcade/server.py \
-            --skip-validate \
-            --server-name GeoAudit \
-            --server-version ${{ steps.ver.outputs.version }} \
-            --secrets skip
-
-      - name: Sync GeoAudit secrets
-        run: |
-          arcade secret set ANTHROPIC_API_KEY="${{ secrets.ANTHROPIC_API_KEY }}"
 
   # -------------------------------------------------------------------------
   # BenchmarkControl

@@ -5,10 +5,9 @@ build-backend = "hatchling.build"
 [project]
 name = "geo-audit-arcade"
 version = "0.4.0"
-description = "Arcade MCP server for deterministic GEO evidence collection and claim validation"
+description = "Python library for deterministic GEO evidence collection and Claude-powered site analysis"
 requires-python = ">=3.10"
 dependencies = [
-    "arcade-mcp-server>=1.11.1,<2.0.0",
     "anthropic>=0.40.0,<1.0.0",
     "httpx>=0.27.2,<1.0.0",
     "beautifulsoup4",
@@ -22,7 +21,6 @@ email = "dev@arcade.dev"
 
 [project.optional-dependencies]
 dev = [
-    "arcade-mcp[all]>=1.8.2,<2.0.0",
     "pytest>=8.3.0",
     "pytest-asyncio>=0.24.0",
     "pytest-mock>=3.11.1",
@@ -30,9 +28,6 @@ dev = [
     "respx>=0.21",
     "ruff>=0.7.4",
 ]
-
-[project.entry-points.arcade_toolkits]
-toolkit_name = "geo_audit_arcade"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/geo_audit_arcade"]
