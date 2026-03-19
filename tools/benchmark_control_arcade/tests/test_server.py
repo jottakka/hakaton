@@ -42,7 +42,7 @@ class TestAppLoads:
         from benchmark_control_arcade.server import app
 
         assert app.name == "BenchmarkControl"
-        assert app.version == "0.2.0"
+        assert app.version == "0.2.1"
 
     def test_app_has_instructions(self):
         from benchmark_control_arcade.server import app
