@@ -67,6 +67,45 @@ class TestFetchRunReport:
         call_path = client.get_file_content.call_args[0][0]
         assert call_path.endswith("report.json")
 
+    @pytest.mark.asyncio
+    async def test_fetch_run_report_falls_back_to_artifact_on_404(self):
+        """When canonical report.json returns 404, fall back to artifacts/report_<id>.json."""
+        from benchmark_control_arcade.github_client import GitHubHTTPError
+        from benchmark_control_arcade.history import fetch_run_report
+
+        record = _make_record()
+        artifact_content = json.dumps({"run_id": record.run_id, "score": 62})
+
+        def _side_effect(path: str) -> str:
+            if path.endswith("report.json") and "artifacts" not in path:
+                raise GitHubHTTPError(404, "Not Found")
+            return artifact_content
+
+        client = MagicMock()
+        client.get_file_content = AsyncMock(side_effect=_side_effect)
+
+        result = await fetch_run_report(client, record.run_id, record.created_at, fmt="json")
+
+        assert result == artifact_content
+        # Second call should target the artifact path
+        calls = [c[0][0] for c in client.get_file_content.call_args_list]
+        assert any("artifacts" in p and record.run_id in p for p in calls)
+
+    @pytest.mark.asyncio
+    async def test_fetch_run_report_reraises_non_404_errors(self):
+        """Non-404 HTTP errors must propagate, not be swallowed."""
+        from benchmark_control_arcade.github_client import GitHubHTTPError
+        from benchmark_control_arcade.history import fetch_run_report
+
+        record = _make_record()
+        client = MagicMock()
+        client.get_file_content = AsyncMock(
+            side_effect=GitHubHTTPError(500, "Internal Server Error")
+        )
+
+        with pytest.raises(GitHubHTTPError):
+            await fetch_run_report(client, record.run_id, record.created_at, fmt="json")
+
 
 class TestFetchRunArtifacts:
     @pytest.mark.asyncio

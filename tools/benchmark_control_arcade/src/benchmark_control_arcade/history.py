@@ -14,15 +14,32 @@ async def fetch_run_report(
 ) -> str:
     """Return the text content of the run report from the data branch.
 
+    Tries the canonical layout path first (report.md / report.json at the
+    run root), then falls back to the ``report_<run_id>.json`` artifact that
+    both the AIOA and GEO runners write into the ``artifacts/`` subdirectory.
+    The artifact fallback always returns JSON regardless of *fmt*.
+
     Args:
         client: An authenticated GitHubClient.
         run_id: The run identifier.
         created_at: When the run was created (used to locate its directory).
         fmt: "md" (default) for the Markdown report, "json" for the JSON report.
     """
+    from benchmark_control_arcade.github_client import GitHubHTTPError
+
     layout = build_run_layout(run_id, created_at)
-    path = str(layout.report_md if fmt == "md" else layout.report_json)
-    return await client.get_file_content(path)
+    canonical_path = str(layout.report_md if fmt == "md" else layout.report_json)
+
+    try:
+        return await client.get_file_content(canonical_path)
+    except GitHubHTTPError as exc:
+        if exc.status_code != 404:
+            raise
+
+    # Canonical report not found — fall back to the artifact report JSON.
+    # Both aioa_runner and geo_runner write report_<run_id>.json under artifacts/.
+    artifact_path = str(layout.artifacts_dir / f"report_{run_id}.json")
+    return await client.get_file_content(artifact_path)
 
 
 async def fetch_run_artifacts(
